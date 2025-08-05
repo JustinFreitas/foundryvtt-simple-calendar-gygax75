@@ -1,9 +1,9 @@
 {
 	"id": "foundryvtt-simple-calendar",
-	"name": "foundryvtt-simple-calendar",
 	"title": "Simple Calendar",
 	"description": "A simple calendar module for keeping track of game days and events.",
 	"version": "2.4.18",
+    "library": "false",
 	"authors": [
 		{
 			"name": "Dean Vigoren (Vigorator)",
@@ -11,20 +11,23 @@
 			"discord": "vigorator",
 			"patreon": "vigorator",
 			"ko-fi": "vigorator"
-		}
+		},
+        {
+            "name": "Justin Freitas",
+            "url": "https://github.com/JustinFreitas"
+        }
 	],
-	"minimumCoreVersion": "10",
-	"compatibleCoreVersion": "12",
 	"compatibility": {
-		"minimum": "10",
-		"verified": "12"
+        "minimum": "12",
+        "verified": "13",
+        "maximum": "13"
 	},
-	"url": "https://github.com/vigoren/foundryvtt-simple-calendar",
-	"bugs": "https://github.com/vigoren/foundryvtt-simple-calendar/issues",
-	"readme": "https://github.com/vigoren/foundryvtt-simple-calendar/blob/main/README.md",
-	"license": "https://github.com/vigoren/foundryvtt-simple-calendar/blob/main/LICENSE",
-	"manifest": "#{MANIFEST}#",
-	"download": "#{DOWNLOAD}#",
+	"url": "https://github.com/JustinFreitas/foundryvtt-simple-calendar-gygax75",
+	"bugs": "https://github.com/JustinFreitas/foundryvtt-simple-calendar-gygax75/issues",
+	"readme": "https://github.com/JustinFreitas/foundryvtt-simple-calendar-gygax75/blob/main/README.md",
+	"license": "https://github.com/JustinFreitas/foundryvtt-simple-calendar-gygax75/blob/main/LICENSE",
+	"manifest": "REPLACED WITH MANIFEST URL",
+	"download": "REPLACED WITH DOWNLOAD URL",
 	"esmodules": [
 		"./index.js"
 	],
