@@ -325,19 +325,17 @@ export default class SCController {
      * Adds the calendar button to the token button list
      * @param controls
      */
-    public getSceneControlButtons(controls: any[]) {
+    public getSceneControlButtons(controls: any) {
         if (canUser((<Game>game).user, this.globalConfiguration.permissions.viewCalendar)) {
-            const tokenControls = controls.find((c) => {
-                return c.name === "notes";
-            });
+            const tokenControls = controls.notes;
             if (tokenControls && Object.prototype.hasOwnProperty.call(tokenControls, "tools")) {
-                tokenControls.tools.push({
+                tokenControls.tools.calendar = {
                     name: "calendar",
                     title: "FSC.Title",
                     icon: "fas fa-calendar simple-calendar-icon",
                     button: true,
                     onClick: MainApplication.sceneControlButtonClick.bind(MainApplication)
-                });
+                };
             }
         }
     }
@@ -345,10 +343,10 @@ export default class SCController {
     /**
      * Checks settings to see if the note directory should be shown or hidden from the journal directory
      */
-    public async renderJournalDirectory(tab: JournalDirectory, jquery: JQuery) {
+    public async renderJournalDirectory(tab: JournalDirectory, htmlElement: HTMLElement) {
         await NManager.createJournalDirectory();
         if (!this.globalConfiguration.showNotesFolder && NManager.noteDirectory) {
-            const folder = jquery.find(`.folder[data-folder-id='${NManager.noteDirectory.id}']`);
+            const folder = htmlElement.querySelector(`.folder[data-folder-id='${NManager.noteDirectory.id}']`);
             if (folder) {
                 folder.remove();
             }
@@ -358,9 +356,9 @@ export default class SCController {
     /**
      * Checks settings to see if the note directory should be shown or hidden from the journal sheet directory dropdown
      */
-    public renderJournalSheet(sheet: JournalSheet, jquery: JQuery) {
+    public renderJournalSheet(sheet: JournalSheet, htmlElement: HTMLElement) {
         if (!this.globalConfiguration.showNotesFolder && NManager.noteDirectory) {
-            const option = jquery.find(`option[value='${NManager.noteDirectory.id}']`);
+            const option = htmlElement.querySelector(`option[value='${NManager.noteDirectory.id}']`);
             if (option) {
                 option.remove();
             }
