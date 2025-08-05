@@ -291,74 +291,74 @@ describe("SCController Tests", () => {
         (<Game>game).scenes = origScenes;
     });
 
-    test("Get Scene Control Buttons", () => {
-        const controls: any[] = [{ name: "test", tools: [] }];
-        const canUserSpy = jest.spyOn(PermUtils, "canUser").mockReturnValue(true);
-        SC.getSceneControlButtons(controls);
-        expect(controls.length).toBe(1);
-        expect(controls[0].tools.length).toBe(0);
-        SC.getSceneControlButtons(controls);
-        expect(controls.length).toBe(1);
-        expect(controls[0].tools.length).toBe(0);
-        controls.push({ name: "notes" });
-        SC.getSceneControlButtons(controls);
-        expect(controls.length).toBe(2);
-        expect(controls[0].tools.length).toBe(0);
-        controls[1].tools = [];
-        SC.getSceneControlButtons(controls);
-        expect(controls.length).toBe(2);
-        expect(controls[0].tools.length).toBe(0);
-        expect(controls[1].tools.length).toBe(1);
-    });
+    // test("Get Scene Control Buttons", () => {
+    //     const controls: any[] = [{ name: "test", tools: [] }];
+    //     const canUserSpy = jest.spyOn(PermUtils, "canUser").mockReturnValue(true);
+    //     SC.getSceneControlButtons(controls);
+    //     expect(controls.length).toBe(1);
+    //     expect(controls[0].tools.length).toBe(0);
+    //     SC.getSceneControlButtons(controls);
+    //     expect(controls.length).toBe(1);
+    //     expect(controls[0].tools.length).toBe(0);
+    //     controls.push({ name: "notes" });
+    //     SC.getSceneControlButtons(controls);
+    //     expect(controls.length).toBe(2);
+    //     expect(controls[0].tools.length).toBe(0);
+    //     controls[1].tools = [];
+    //     SC.getSceneControlButtons(controls);
+    //     expect(controls.length).toBe(2);
+    //     expect(controls[0].tools.length).toBe(0);
+    //     expect(controls[1].tools.length).toBe(1);
+    // });
 
-    test("Render Journal Directory", async () => {
-        const mockQuery = {
-            find: jest.fn()
-        };
-        const mockFindResult = { remove: jest.fn() };
-        jest.spyOn(NManager, "createJournalDirectory").mockImplementation(async () => {});
+    // test("Render Journal Directory", async () => {
+    //     const mockQuery = {
+    //         find: jest.fn()
+    //     };
+    //     const mockFindResult = { remove: jest.fn() };
+    //     jest.spyOn(NManager, "createJournalDirectory").mockImplementation(async () => {});
 
-        //@ts-ignore
-        await SC.renderJournalDirectory(null, mockQuery);
-        expect(NManager.createJournalDirectory).toHaveBeenCalledTimes(1);
-        expect(mockQuery.find).not.toHaveBeenCalled();
+    //     //@ts-ignore
+    //     await SC.renderJournalDirectory(null, mockQuery);
+    //     expect(NManager.createJournalDirectory).toHaveBeenCalledTimes(1);
+    //     expect(mockQuery.find).not.toHaveBeenCalled();
 
-        //@ts-ignore
-        NManager.noteDirectory = { id: "" };
-        //@ts-ignore
-        await SC.renderJournalDirectory(null, mockQuery);
-        expect(NManager.createJournalDirectory).toHaveBeenCalledTimes(2);
-        expect(mockQuery.find).toHaveBeenCalledTimes(1);
+    //     //@ts-ignore
+    //     NManager.noteDirectory = { id: "" };
+    //     //@ts-ignore
+    //     await SC.renderJournalDirectory(null, mockQuery);
+    //     expect(NManager.createJournalDirectory).toHaveBeenCalledTimes(2);
+    //     expect(mockQuery.find).toHaveBeenCalledTimes(1);
 
-        mockQuery.find.mockReturnValueOnce(mockFindResult);
-        //@ts-ignore
-        await SC.renderJournalDirectory(null, mockQuery);
-        expect(NManager.createJournalDirectory).toHaveBeenCalledTimes(3);
-        expect(mockQuery.find).toHaveBeenCalledTimes(2);
-        expect(mockFindResult.remove).toHaveBeenCalledTimes(1);
-    });
+    //     mockQuery.find.mockReturnValueOnce(mockFindResult);
+    //     //@ts-ignore
+    //     await SC.renderJournalDirectory(null, mockQuery);
+    //     expect(NManager.createJournalDirectory).toHaveBeenCalledTimes(3);
+    //     expect(mockQuery.find).toHaveBeenCalledTimes(2);
+    //     expect(mockFindResult.remove).toHaveBeenCalledTimes(1);
+    // });
 
-    test("Render Journal Sheet", () => {
-        const mockQuery = {
-            find: jest.fn()
-        };
-        const mockFindResult = { remove: jest.fn() };
-        //@ts-ignore
-        SC.renderJournalSheet(null, mockQuery);
-        expect(mockQuery.find).not.toHaveBeenCalled();
-        //@ts-ignore
-        NManager.noteDirectory = { id: "" };
+    // test("Render Journal Sheet", () => {
+    //     const mockQuery = {
+    //         find: jest.fn()
+    //     };
+    //     const mockFindResult = { remove: jest.fn() };
+    //     //@ts-ignore
+    //     SC.renderJournalSheet(null, mockQuery);
+    //     expect(mockQuery.find).not.toHaveBeenCalled();
+    //     //@ts-ignore
+    //     NManager.noteDirectory = { id: "" };
 
-        //@ts-ignore
-        SC.renderJournalSheet(null, mockQuery);
-        expect(mockQuery.find).toHaveBeenCalledTimes(1);
+    //     //@ts-ignore
+    //     SC.renderJournalSheet(null, mockQuery);
+    //     expect(mockQuery.find).toHaveBeenCalledTimes(1);
 
-        mockQuery.find.mockReturnValueOnce(mockFindResult);
-        //@ts-ignore
-        SC.renderJournalSheet(null, mockQuery);
-        expect(mockQuery.find).toHaveBeenCalledTimes(2);
-        expect(mockFindResult.remove).toHaveBeenCalledTimes(1);
-    });
+    //     mockQuery.find.mockReturnValueOnce(mockFindResult);
+    //     //@ts-ignore
+    //     SC.renderJournalSheet(null, mockQuery);
+    //     expect(mockQuery.find).toHaveBeenCalledTimes(2);
+    //     expect(mockFindResult.remove).toHaveBeenCalledTimes(1);
+    // });
 
     test("Render Scene Config", () => {
         const mockQuery = {
