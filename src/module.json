@@ -108,7 +108,6 @@
 		}
 	],
 	"socket": true,
-	"manifestPlusVersion": "1.2.0",
 	"media": [
 		{
 			"type": "setup",
