@@ -229,7 +229,7 @@ export default class MainApp extends FormApplication {
      * @param force
      * @param options
      */
-    render(force?: boolean, options?: Application.RenderOptions<FormApplicationOptions>): unknown {
+    render(force?: boolean, options?: foundry.applications.api.ApplicationV2.RenderOptions<FormApplicationOptions>): unknown {
         if (typeof force === "undefined") {
             force = true;
         }
@@ -237,7 +237,7 @@ export default class MainApp extends FormApplication {
             if (this.visibleCalendar.timeKeeper.getStatus() !== TimeKeeperStatus.Started) {
                 //this.visibleCalendar.setCurrentToVisible();
             }
-            const mergedOptions: Application.RenderOptions = deepMerge({}, options);
+            const mergedOptions: foundry.applications.api.ApplicationV2.RenderOptions = deepMerge({}, options);
             if (this.opening) {
                 this.uiElementStates.compactView = GameSettings.GetBooleanSettings(SettingNames.OpenCompact);
 
@@ -373,8 +373,8 @@ export default class MainApp extends FormApplication {
         }
 
         // Set the outer frame z-index
-        if (Object.keys(ui.windows).length === 0) _maxZ = 100 - 1;
-        this.position.zIndex = Math.min(++_maxZ, 9999);
+        if (Object.keys(ui.windows).length === 0) foundry.applications.api.ApplicationV2._maxZ = 100 - 1;
+        this.position.zIndex = Math.min(++foundry.applications.api.ApplicationV2._maxZ, 9999);
         html.css({ zIndex: this.position.zIndex });
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
@@ -1267,7 +1267,7 @@ export default class MainApp extends FormApplication {
                     if (action === "showPlayers") {
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         //@ts-ignore
-                        Journal.showDialog(journalEntry).catch((e) => {
+                        foundry.documents.collections.Journal.showDialog(journalEntry).catch((e) => {
                             return console.error(e);
                         });
                     } else if (action === "delete") {

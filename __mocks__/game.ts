@@ -228,4 +228,4 @@ global.getRoute = (a: string) => {
 };
 
 //@ts-ignore
-global._maxZ = 100;
+foundry.applications.api.ApplicationV2._maxZ = 100;
