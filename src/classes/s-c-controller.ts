@@ -356,7 +356,7 @@ export default class SCController {
     /**
      * Checks settings to see if the note directory should be shown or hidden from the journal sheet directory dropdown
      */
-    public renderJournalSheet(sheet: foundry.appv1.sheets.JournalSheet, htmlElement: HTMLElement) {
+    public renderJournalSheet(sheet: foundry.applications.sheets.JournalSheet, htmlElement: HTMLElement) {
         if (!this.globalConfiguration.showNotesFolder && NManager.noteDirectory) {
             const option = htmlElement.querySelector(`option[value='${NManager.noteDirectory.id}']`);
             if (option) {
