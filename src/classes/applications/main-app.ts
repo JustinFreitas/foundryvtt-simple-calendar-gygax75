@@ -229,7 +229,7 @@ export default class MainApp extends FormApplication {
      * @param force
      * @param options
      */
-    render(force?: boolean, options?: foundry.applications.api.ApplicationV2.RenderOptions<FormApplicationOptions>): unknown {
+    render(force?: boolean, options?: Application.RenderOptions<FormApplicationOptions>): unknown {
         if (typeof force === "undefined") {
             force = true;
         }
@@ -237,7 +237,7 @@ export default class MainApp extends FormApplication {
             if (this.visibleCalendar.timeKeeper.getStatus() !== TimeKeeperStatus.Started) {
                 //this.visibleCalendar.setCurrentToVisible();
             }
-            const mergedOptions: foundry.applications.api.ApplicationV2.RenderOptions = deepMerge({}, options);
+            const mergedOptions: Application.RenderOptions = deepMerge({}, options);
             if (this.opening) {
                 this.uiElementStates.compactView = GameSettings.GetBooleanSettings(SettingNames.OpenCompact);
 
