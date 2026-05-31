@@ -63,7 +63,7 @@ module.exports = {
         }),
         new MangleCssClassPlugin({
             classNameRegExp: 'fsc-[a-z\-][a-zA-Z0-9_\-]*',
-            reserveClassName: ['fa', 'fas', 'far'],
+            reserveClassName: ['fa', 'fas', 'far', 'fa-solid', 'fa-regular', 'fa-brands'],
             ignorePrefix: ['fsc-']
         }),
         new RemoveEmptyScriptsPlugin(),
