@@ -827,6 +827,7 @@ export default class MainApp extends FormApplication {
         const unitList = document.querySelector(`.fsc-main-wrapper .fsc-unit-list`);
         if (unitList) {
             this.uiElementStates.dateTimeUnitOpen = animateElement(unitList, 500, forceHide);
+            this.updateApp();
             if (this.uiElementStates.compactView) {
                 const rect = unitList.getBoundingClientRect();
                 if (rect.top < window.innerHeight / 2) {
