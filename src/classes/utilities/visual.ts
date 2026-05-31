@@ -105,16 +105,16 @@ export function GetIcon(icon: Icons, strokeColor: string = "#000000", fillColor:
             fillSearch = /fill="#ffffff"/g;
             break;
         case Icons.Spring:
-            iString = `<span class="fa fa-seedling" style="color:${strokeColor};"></span>`;
+            iString = `<span class="fa-solid fa-seedling" style="color:${strokeColor};"></span>`;
             break;
         case Icons.Summer:
-            iString = `<span class="fa fa-sun" style="color:${strokeColor};"></span>`;
+            iString = `<span class="fa-solid fa-sun" style="color:${strokeColor};"></span>`;
             break;
         case Icons.Fall:
-            iString = `<span class="fa fa-leaf" style="color:${strokeColor};"></span>`;
+            iString = `<span class="fa-solid fa-leaf" style="color:${strokeColor};"></span>`;
             break;
         case Icons.Winter:
-            iString = `<span class="fa fa-snowflake" style="color:${strokeColor};"></span>`;
+            iString = `<span class="fa-solid fa-snowflake" style="color:${strokeColor};"></span>`;
             break;
         default:
             break;

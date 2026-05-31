@@ -228,4 +228,20 @@ global.getRoute = (a: string) => {
 };
 
 //@ts-ignore
-foundry.applications.api.ApplicationV2._maxZ = 100;
+global.foundry = global.foundry || {};
+//@ts-ignore
+global.foundry.applications = global.foundry.applications || { api: { ApplicationV2: {} } };
+//@ts-ignore
+if(!global.foundry.applications.api) global.foundry.applications.api = { ApplicationV2: {} };
+//@ts-ignore
+if(!global.foundry.applications.api.ApplicationV2) global.foundry.applications.api.ApplicationV2 = {};
+//@ts-ignore
+global.foundry.applications.api.ApplicationV2._maxZ = 100;
+//@ts-ignore
+global.foundry.documents = global.foundry.documents || {};
+//@ts-ignore
+global.foundry.documents.collections = global.foundry.documents.collections || {};
+//@ts-ignore
+global.foundry.documents.collections.Journal = global.Journal;
+//@ts-ignore
+global._maxZ = 100;

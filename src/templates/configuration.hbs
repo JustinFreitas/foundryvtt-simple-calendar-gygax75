@@ -15,10 +15,10 @@
                 <ul class="fsc-closed">
                     {{#each calendars}}
                         <li class="{{#if (eq ../object.id id)}} fsc-active{{/if}}" data-calendar="{{id}}">
-                            {{name}} {{#unless (eq id 'default_temp')}}<button class="fsc-control fsc-delete" data-tooltip="{{localize 'FSC.RemoveCalendar'}}" data-calendar="{{id}}"><span class="fa fa-trash"></span></button>{{/unless}}
+                            {{name}} {{#unless (eq id 'default_temp')}}<button class="fsc-control fsc-delete" data-tooltip="{{localize 'FSC.RemoveCalendar'}}" data-calendar="{{id}}"><span class="fa-solid fa-trash"></span></button>{{/unless}}
                         </li>
                     {{/each}}
-                    <li class="fsc-item fsc-new-calendar" data-tab="newCalendar">{{localize 'FSC.AddNewCalendar'}}<span class="fa fa-plus-circle"></span></li>
+                    <li class="fsc-item fsc-new-calendar" data-tab="newCalendar">{{localize 'FSC.AddNewCalendar'}}<span class="fa-solid fa-plus-circle"></span></li>
                 </ul>
             </div>
             <a class="fsc-item" data-tab="quickSetup">{{localize 'FSC.Configuration.General.QuickSetup'}}</a>
@@ -37,7 +37,7 @@
         {{/if}}
         <div class="fsc-tab-section fsc-help">
             <div class="fsc-heading">{{localize 'FSC.Help'}}</div>
-            <a class="fsc-item" href="https://simplecalendar.info/" target="_blank">{{localize 'FSC.Documentation'}}&nbsp;<span class="fa fa-external-link-alt"></span></a>
+            <a class="fsc-item" href="https://simplecalendar.info/" target="_blank">{{localize 'FSC.Documentation'}}&nbsp;<span class="fa-solid fa-external-link-alt"></span></a>
             <a class="fsc-item" data-tab="about">{{localize 'About'}}</a>
         </div>
     </nav>
@@ -45,7 +45,7 @@
         <div class="tab fsc-global-settings" data-tab="globalSettings">
             {{#if isGM}}
             <div class="fsc-section fsc-open">
-                <h2>{{localize 'FSC.Configuration.Global.Title'}} <a href="https://simplecalendar.info/docs/global-configuration/settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Global.Title'}} <a href="https://simplecalendar.info/docs/global-configuration/settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <p>{{localize 'FSC.Configuration.Global.Description'}}</p>
                 <div class="form-group fsc-open">
                     <label for="scSyncCalendars">{{localize 'FSC.Configuration.Global.SyncCalendars.Title'}}</label>
@@ -96,7 +96,7 @@
             </div>
             {{/if}}
             <div class="fsc-section fsc-open">
-                <h2>{{localize 'FSC.Configuration.Client.Title'}} <a href="https://simplecalendar.info/docs/using-sc/client-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Client.Title'}} <a href="https://simplecalendar.info/docs/using-sc/client-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <p>{{localize 'FSC.Configuration.Client.Description'}}</p>
                 <div class="form-group fsc-open">
                     <label for="scTheme">{{localize 'FSC.Configuration.Theme.Title'}}</label>
@@ -179,7 +179,7 @@
 
         {{#if isGM}}
         <div class="tab fsc-permissions" data-tab="permissions">
-            <h2>{{localize 'Permissions'}} <a href="https://simplecalendar.info/docs/global-configuration/permissions" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+            <h2>{{localize 'Permissions'}} <a href="https://simplecalendar.info/docs/global-configuration/permissions" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
             <p>{{localize 'FSC.Configuration.General.Permissions.Note'}}</p>
             <header class="fsc-table-header flexrow">
                 <label class="fsc-index">{{localize 'PERMISSION.Permission'}}</label>
@@ -242,7 +242,7 @@
             </ul>
         </div>
         <div class="tab fsc-import-export" data-tab="importExport">
-            <h2>{{localize 'FSC.Configuration.General.ImportExport.Title'}} <a href="https://simplecalendar.info/docs/global-configuration/import-export" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+            <h2>{{localize 'FSC.Configuration.General.ImportExport.Title'}} <a href="https://simplecalendar.info/docs/global-configuration/import-export" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
             <div class="fsc-section fsc-open">
                 <div class="form-group fsc-open">
                     <label>{{localize 'FSC.Import'}}</label>
@@ -259,14 +259,14 @@
                     <label>{{localize 'FSC.Export'}}</label>
                     <div class="form-fields">
                         <ul class="fsc-calendar-list">
-                            <li><label><input type="checkbox" data-id="global" checked /><span class="fa fa-cog"></span>&nbsp;{{localize 'FSC.Configuration.Global.Title'}}</label></li>
-                            <li><label><input type="checkbox" data-id="permissions" checked /><span class="fa fa-key"></span>&nbsp;{{localize 'Permissions'}}</label></li>
+                            <li><label><input type="checkbox" data-id="global" checked /><span class="fa-solid fa-cog"></span>&nbsp;{{localize 'FSC.Configuration.Global.Title'}}</label></li>
+                            <li><label><input type="checkbox" data-id="permissions" checked /><span class="fa-solid fa-key"></span>&nbsp;{{localize 'Permissions'}}</label></li>
                             {{#each calendars}}
-                                <li><label><input type="checkbox" data-id="{{id}}" checked /><strong><span class="fa fa-calendar"></span> {{name}}</strong>: {{localize 'FSC.CalendarConfiguration'}}</label></li>
-                                <li><label><input type="checkbox" data-id="{{id}}-notes" checked /><strong><span class="fa fa-sticky-note"></span> {{name}}</strong>: {{localize 'FSC.CalendarNotes'}}</label></li>
+                                <li><label><input type="checkbox" data-id="{{id}}" checked /><strong><span class="fa-solid fa-calendar"></span> {{name}}</strong>: {{localize 'FSC.CalendarConfiguration'}}</label></li>
+                                <li><label><input type="checkbox" data-id="{{id}}-notes" checked /><strong><span class="fa-solid fa-sticky-note"></span> {{name}}</strong>: {{localize 'FSC.CalendarNotes'}}</label></li>
                             {{/each}}
                         </ul>
-                        <button class="fsc-control fsc-secondary" id="exportCalendar"><i class="fa fa-file-export"></i> {{localize 'FSC.Export'}}</button>
+                        <button class="fsc-control fsc-secondary" id="exportCalendar"><i class="fa-solid fa-file-export"></i> {{localize 'FSC.Export'}}</button>
                     </div>
                     <p class="notes">{{localize 'FSC.Configuration.ImportExport.ExportDescription'}}</p>
                 </div>
@@ -274,7 +274,7 @@
         </div>
 
         <div class="tab fsc-new-calendar" data-tab="newCalendar">
-            <h2>{{localize 'FSC.AddNewCalendar'}} <a href="https://simplecalendar.info/docs/calendar-configuration/add-remove-switch-calendar#add-a-new-calendar" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+            <h2>{{localize 'FSC.AddNewCalendar'}} <a href="https://simplecalendar.info/docs/calendar-configuration/add-remove-switch-calendar#add-a-new-calendar" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
             <div class="form-group fsc-open">
                 <label for="scAddCalendarName">{{localize 'FSC.Configuration.AddCalendar.CalendarName'}}</label>
                 <div class="form-fields">
@@ -285,7 +285,7 @@
             </div>
         </div>
         <div class="tab fsc-quick-setup" data-tab="quickSetup">
-            <h2>{{localize 'FSC.Configuration.General.QuickSetup'}} <a href="https://simplecalendar.info/docs/calendar-configuration/quick-setup" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+            <h2>{{localize 'FSC.Configuration.General.QuickSetup'}} <a href="https://simplecalendar.info/docs/calendar-configuration/quick-setup" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
             <p>{{localize 'FSC.Configuration.QuickSetup.Description'}}</p>
             <div class="fsc-section-wrapper">
                 <div class="fsc-section fsc-predefined {{#if uiElementStates.qsNextClicked}} fsc-closed{{else}} fsc-open{{/if}}">
@@ -300,10 +300,10 @@
                                         <div class="fsc-predefined-calendar-includes">
                                             {{localize "FSC.Includes"}}:
                                             {{#if config}}
-                                                <span class="fa fa-calendar" data-tooltip="{{localize "FSC.CalendarConfiguration"}}"></span>
+                                                <span class="fa-solid fa-calendar" data-tooltip="{{localize "FSC.CalendarConfiguration"}}"></span>
                                             {{/if}}
                                             {{#if notes}}
-                                                <span class="fa fa-sticky-note" data-tooltip="{{localize "FSC.CalendarNotes"}}"></span>
+                                                <span class="fa-solid fa-sticky-note" data-tooltip="{{localize "FSC.CalendarNotes"}}"></span>
                                             {{/if}}
                                         </div>
                                     </div>
@@ -320,7 +320,7 @@
                         <p class="notes">{{localize 'FSC.Configuration.QuickSetup.ImportNotesDescription'}}</p>
                     </div>
                     <div class="fsc-control-section">
-                        <button class="fsc-control fsc-primary fsc-qs-next" {{#unless uiElementStates.selectedPredefinedCalendar}}style="display: none;" {{/unless}}>{{localize 'FSC.Next'}}&nbsp;<span class="fa fa-arrow-right"></span></button>
+                        <button class="fsc-control fsc-primary fsc-qs-next" {{#unless uiElementStates.selectedPredefinedCalendar}}style="display: none;" {{/unless}}>{{localize 'FSC.Next'}}&nbsp;<span class="fa-solid fa-arrow-right"></span></button>
                     </div>
                 </div>
                 <div class="fsc-section fsc-settings {{#if uiElementStates.qsNextClicked}} fsc-open{{else}} fsc-closed{{/if}}">
@@ -339,15 +339,15 @@
                         <p class="notes">{{localize 'FSC.Configuration.General.ShowClockHelp'}}</p>
                     </div>
                     <div class="fsc-control-section">
-                        <button class="fsc-control fsc-primary fsc-qs-back"><span class="fa fa-arrow-left"></span>&nbsp;{{localize 'FSC.Back'}}</button>
-                        <button class="fsc-control fsc-save fsc-qs-save"><span class="fa fa-save"></span>&nbsp;{{localize 'FSC.Save'}}</button>
+                        <button class="fsc-control fsc-primary fsc-qs-back"><span class="fa-solid fa-arrow-left"></span>&nbsp;{{localize 'FSC.Back'}}</button>
+                        <button class="fsc-control fsc-save fsc-qs-save"><span class="fa-solid fa-save"></span>&nbsp;{{localize 'FSC.Save'}}</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="tab fsc-general-settings" data-tab="generalSettings">
-            <h2>{{localize 'FSC.Configuration.General.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/general-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+            <h2>{{localize 'FSC.Configuration.General.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/general-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
             <p>{{localize 'FSC.Configuration.General.Description'}}</p>
             <div class="settings-group fsc-open">
                 <div class="form-group fsc-open">
@@ -379,7 +379,7 @@
         </div>
         <div class="tab fsc-display-options" data-tab="displayOptions">
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Display.DateTimeFormat'}} <a href="https://simplecalendar.info/docs/calendar-configuration/display-options" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Display.DateTimeFormat'}} <a href="https://simplecalendar.info/docs/calendar-configuration/display-options" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <p>{{{localize 'FSC.Configuration.Display.Description'}}}</p>
                 <div class="fsc-f-table fsc-tokens" style="border-top: 1px solid #7a7971;">
                     <div class="fsc-row fsc-head fsc-date-format-token-show" style="cursor: pointer;">
@@ -387,7 +387,7 @@
                             <div>{{localize 'FSC.DateFormat.Title'}}</div>
                             <div style="flex: 1 1 100%;font-weight: normal;font-size: 0.75rem; margin-top: 0.5rem;">{{localize 'FSC.DateFormat.Description'}}</div>
                         </div>
-                        <div class="fa {{#if showDateFormatTokens}}fa-chevron-up{{else}}fa-chevron-down{{/if}}" style="flex: 0 1 50px;"></div>
+                        <div class="fa-solid {{#if showDateFormatTokens}}fa-chevron-up{{else}}fa-chevron-down{{/if}}" style="flex: 0 1 50px;"></div>
                     </div>
                     <div class="fsc-collapse-data" style="{{#unless showDateFormatTokens}}display: none;{{/unless}}">
                         <div class="fsc-row">
@@ -659,7 +659,7 @@
                 </div>
             </div>
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Display.Compact'}} <a href="https://simplecalendar.info/docs/calendar-configuration/display-options#compact-view-options" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Display.Compact'}} <a href="https://simplecalendar.info/docs/calendar-configuration/display-options#compact-view-options" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open">
                     <label>{{localize 'FSC.Configuration.Display.CompactControls.Title'}}</label>
                     <div class="form-fields">
@@ -680,7 +680,7 @@
         </div>
         <div class="tab fsc-year-settings" data-tab="yearSettings">
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Year.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/year-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Year.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/year-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open">
                     <label for="scCurrentYear">{{localize 'FSC.Configuration.Year.Current'}}</label>
                     <div class="form-fields">
@@ -711,7 +711,7 @@
                 </div>
             </div>
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Year.YearNames'}} <a href="https://simplecalendar.info/docs/calendar-configuration/year-settings#year-names" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Year.YearNames'}} <a href="https://simplecalendar.info/docs/calendar-configuration/year-settings#year-names" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open">
                     <label for="scYearNameBehaviour">{{localize 'FSC.Configuration.Year.YearNameBehaviour'}}</label>
                     <div class="form-fields">
@@ -743,21 +743,21 @@
                             <input id="-yearName{{@index}}" class="fsc-year-name" value="{{this}}" type="text" aria-describedby="fsc-year-name" />
                         </div>
                         <div class="fsc-col">
-                            <button class="fsc-control fsc-delete" data-type="year-name"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
+                            <button class="fsc-control fsc-delete" data-type="year-name"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
                         </div>
                     </div>
                     {{/each}}
                 </div>
                 <div class="fsc-table-actions">
-                    <button class="fsc-control fsc-save" data-type="year-name"><span class="fa fa-plus"></span> {{localize 'FSC.Configuration.Year.YearNameAdd'}}</button>
+                    <button class="fsc-control fsc-save" data-type="year-name"><span class="fa-solid fa-plus"></span> {{localize 'FSC.Configuration.Year.YearNameAdd'}}</button>
                     <span class="fsc-spacer"></span>
-                    <button class="fsc-control fsc-delete" data-type="year-name" data-index="all"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Year.YearNameRemove'}}</button>
+                    <button class="fsc-control fsc-delete" data-type="year-name" data-index="all"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Year.YearNameRemove'}}</button>
                 </div>
             </div>
         </div>
         <div class="tab fsc-month-settings" data-tab="monthSettings"  >
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Months'}} <a href="https://simplecalendar.info/docs/calendar-configuration/month-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Months'}} <a href="https://simplecalendar.info/docs/calendar-configuration/month-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <p>{{localize 'FSC.Configuration.Month.Description'}}</p>
                 <div class="fsc-hidden-label">
                     <label id="fsc-month-name">{{localize 'FSC.Configuration.Month.NameHelp'}}</label>
@@ -790,13 +790,13 @@
                         <div class="fsc-col fsc-month-number">{{#if (gt numericRepresentation 0)}}{{numericRepresentation}}{{else}}IC{{/if}}</div>
                         <div class="fsc-col">
                             {{#if showAdvanced}}
-                            <a class="fsc-show-advanced" aria-expanded="true" aria-controls="-monthAdvanced{{@index}}"><i class="fa fa-chevron-up"></i><span>{{localize 'FSC.HideAdvanced'}}</span></a>
+                            <a class="fsc-show-advanced" aria-expanded="true" aria-controls="-monthAdvanced{{@index}}"><i class="fa-solid fa-chevron-up"></i><span>{{localize 'FSC.HideAdvanced'}}</span></a>
                             {{else}}
-                            <a class="fsc-show-advanced" aria-expanded="false" aria-controls="-monthAdvanced{{@index}}"><i class="fa fa-chevron-down"></i><span>{{localize 'FSC.ShowAdvanced'}}</span></a>
+                            <a class="fsc-show-advanced" aria-expanded="false" aria-controls="-monthAdvanced{{@index}}"><i class="fa-solid fa-chevron-down"></i><span>{{localize 'FSC.ShowAdvanced'}}</span></a>
                             {{/if}}
                         </div>
                         <div class="fsc-col">
-                            <button class="fsc-control fsc-delete" data-type="month"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
+                            <button class="fsc-control fsc-delete" data-type="month"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
                         </div>
                         <div id="-monthAdvanced{{@index}}" class="fsc-options {{#if showAdvanced }} fsc-open{{else}} fsc-closed{{/if}}">
                             <div class="form-group fsc-open">
@@ -841,15 +841,15 @@
                     {{/each}}
                 </div>
                 <div class="fsc-table-actions">
-                    <button class="fsc-control fsc-save" data-type="month"><span class="fa fa-plus"></span> {{localize 'FSC.Configuration.Month.Add'}}</button>
+                    <button class="fsc-control fsc-save" data-type="month"><span class="fa-solid fa-plus"></span> {{localize 'FSC.Configuration.Month.Add'}}</button>
                     <span class="fsc-spacer"></span>
-                    <button class="fsc-control fsc-delete" data-type="month" data-index="all"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.RemoveAll'}}</button>
+                    <button class="fsc-control fsc-delete" data-type="month" data-index="all"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.RemoveAll'}}</button>
                 </div>
             </div>
         </div>
         <div class="tab fsc-weekday-settings" data-tab="weekdaySettings" >
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Weekday.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/weekday-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Weekday.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/weekday-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open">
                     <label for="scShowWeekdayHeaders">{{localize 'FSC.Configuration.Weekday.ShowHeadings'}}</label>
                     <div class="form-fields">
@@ -870,7 +870,7 @@
                 </div>
             </div>
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Weekdays'}} <a href="https://simplecalendar.info/docs/calendar-configuration/weekday-settings#weekdays" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Weekdays'}} <a href="https://simplecalendar.info/docs/calendar-configuration/weekday-settings#weekdays" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="fsc-hidden-label">
                     <label id="fsc-weekday-name">{{localize 'FSC.Configuration.Weekday.NameHelp'}}</label>
                     <label id="fsc-weekday-abbreviation">{{localize 'FSC.Configuration.Weekday.AbbreviationHelp'}}</label>
@@ -894,13 +894,13 @@
                         </div>
                         <div class="fsc-col">
                             {{#if showAdvanced}}
-                                <a class="fsc-show-advanced" aria-expanded="true" aria-controls="-weekdayAdvanced{{@index}}"><i class="fa fa-chevron-up"></i><span>{{localize 'FSC.HideAdvanced'}}</span></a>
+                                <a class="fsc-show-advanced" aria-expanded="true" aria-controls="-weekdayAdvanced{{@index}}"><i class="fa-solid fa-chevron-up"></i><span>{{localize 'FSC.HideAdvanced'}}</span></a>
                             {{else}}
-                                <a class="fsc-show-advanced" aria-expanded="false" aria-controls="-weekdayAdvanced{{@index}}"><i class="fa fa-chevron-down"></i><span>{{localize 'FSC.ShowAdvanced'}}</span></a>
+                                <a class="fsc-show-advanced" aria-expanded="false" aria-controls="-weekdayAdvanced{{@index}}"><i class="fa-solid fa-chevron-down"></i><span>{{localize 'FSC.ShowAdvanced'}}</span></a>
                             {{/if}}
                         </div>
                         <div class="fsc-col">
-                            <button class="fsc-control fsc-delete" data-type="weekday"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
+                            <button class="fsc-control fsc-delete" data-type="weekday"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
                         </div>
                         <div id="-weekdayAdvanced{{@index}}" class="fsc-options {{#if showAdvanced }} fsc-open{{else}} fsc-closed{{/if}}">
                             <div class="form-group fsc-open">
@@ -922,15 +922,15 @@
                     {{/each}}
                 </div>
                 <div class="fsc-table-actions">
-                    <button class="fsc-control fsc-save" data-type="weekday"><span class="fa fa-plus"></span> {{localize 'FSC.Configuration.Weekday.Add'}}</button>
+                    <button class="fsc-control fsc-save" data-type="weekday"><span class="fa-solid fa-plus"></span> {{localize 'FSC.Configuration.Weekday.Add'}}</button>
                     <span class="fsc-spacer"></span>
-                    <button class="fsc-control fsc-delete" data-type="weekday" data-index="all"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Weekday.RemoveAll'}}</button>
+                    <button class="fsc-control fsc-delete" data-type="weekday" data-index="all"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Weekday.RemoveAll'}}</button>
                 </div>
             </div>
         </div>
         <div class="tab fsc-leapyear-settings" data-tab="leapYearSettings">
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.LeapYear.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/leap-year-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.LeapYear.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/leap-year-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open {{#if uiElementStates.disabledControls.pf2e}} fsc-disabled{{/if}}">
                     <label for="scLeapYearRule">{{localize 'FSC.Configuration.LeapYear.Rule'}} <span class="fa-solid fa-triangle-exclamation" data-tooltip="{{localize 'FSC.Configuration.General.PF2ESyncDisabledSettings'}}"></span></label>
                     <div class="form-fields">
@@ -956,7 +956,7 @@
                 </div>
             </div>
             <div class="fsc-settings-group {{#if showLeapYearMonths}} fsc-open{{else}} fsc-closed{{/if}}" id="scLeapYearMonthList">
-                <h2>{{localize 'FSC.Configuration.Months'}} <a href="https://simplecalendar.info/docs/calendar-configuration/leap-year-settings#months" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Months'}} <a href="https://simplecalendar.info/docs/calendar-configuration/leap-year-settings#months" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="fsc-hidden-label">
                     <label id="fsc-leapyear-days">{{localize 'FSC.Configuration.LeapYear.DaysHelp'}}</label>
                 </div>
@@ -981,7 +981,7 @@
         </div>
         <div class="tab fsc-season-settings" data-tab="seasonSettings">
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Season.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/season-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Season.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/season-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <datalist id="scSeasonColors">
                     {{#each seasonColors}}
                         <option value="{{value}}">{{display}}</option>
@@ -1028,13 +1028,13 @@
                             </div>
                             <div class="fsc-col">
                                 {{#if showAdvanced}}
-                                    <a class="fsc-show-advanced" aria-expanded="true" aria-controls="-seasonAdvanced{{@index}}"><i class="fa fa-chevron-up"></i><span>{{localize 'FSC.HideAdvanced'}}</span></a>
+                                    <a class="fsc-show-advanced" aria-expanded="true" aria-controls="-seasonAdvanced{{@index}}"><i class="fa-solid fa-chevron-up"></i><span>{{localize 'FSC.HideAdvanced'}}</span></a>
                                 {{else}}
-                                    <a class="fsc-show-advanced" aria-expanded="false" aria-controls="-seasonAdvanced{{@index}}"><i class="fa fa-chevron-down"></i><span>{{localize 'FSC.ShowAdvanced'}}</span></a>
+                                    <a class="fsc-show-advanced" aria-expanded="false" aria-controls="-seasonAdvanced{{@index}}"><i class="fa-solid fa-chevron-down"></i><span>{{localize 'FSC.ShowAdvanced'}}</span></a>
                                 {{/if}}
                             </div>
                             <div class="fsc-col">
-                                <button class="fsc-control fsc-delete" data-type="season"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
+                                <button class="fsc-control fsc-delete" data-type="season"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
                             </div>
                             <div id="-seasonAdvanced{{@index}}" class="fsc-options {{#if showAdvanced }} fsc-open{{else}} fsc-closed{{/if}}">
                                 <div class="form-group fsc-open">
@@ -1049,15 +1049,15 @@
                     {{/each}}
                 </div>
                 <div class="fsc-table-actions">
-                    <button class="fsc-control fsc-save" data-type="season"><span class="fa fa-plus"></span> {{localize 'FSC.Configuration.Season.Add'}}</button>
+                    <button class="fsc-control fsc-save" data-type="season"><span class="fa-solid fa-plus"></span> {{localize 'FSC.Configuration.Season.Add'}}</button>
                     <span class="fsc-spacer"></span>
-                    <button class="fsc-control fsc-delete" data-type="season" data-index="all"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Season.RemoveAll'}}</button>
+                    <button class="fsc-control fsc-delete" data-type="season" data-index="all"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Season.RemoveAll'}}</button>
                 </div>
             </div>
         </div>
         <div class="tab fsc-moon-settings" data-tab="moonSettings">
             <div class="settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Moons'}} <a href="https://simplecalendar.info/docs/calendar-configuration/moon-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Moons'}} <a href="https://simplecalendar.info/docs/calendar-configuration/moon-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="fsc-hidden-label">
                     <label id="fsc-moon-name">{{localize 'FSC.Configuration.Moon.NameHelp'}}</label>
                     <label id="fsc-moon-cycle">{{localize 'FSC.Configuration.Moon.CycleLengthHelp'}}</label>
@@ -1091,7 +1091,7 @@
                             <input id="-moonColor{{@index}}" class="fsc-moon-color" value="{{color}}" type="color" aria-describedby="fsc-moon-color" />
                         </div>
                         <div class="fsc-col">
-                            <button class="fsc-control fsc-delete" data-type="moon"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
+                            <button class="fsc-control fsc-delete" data-type="moon"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
                         </div>
                         <div class="fsc-options fsc-open">
                             <h3>{{localize 'FSC.Configuration.Moon.FirstNewMoon'}}</h3>
@@ -1157,30 +1157,30 @@
                                         </select>
                                     </div>
                                     <div class="fsc-col">
-                                        <button class="fsc-control fsc-delete" data-type="moon-phase" data-moon-index="{{@../index}}"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
+                                        <button class="fsc-control fsc-delete" data-type="moon-phase" data-moon-index="{{@../index}}"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
                                     </div>
                                 </div>
                                 {{/each}}
                             </div>
                             <div class="fsc-table-actions">
-                                <button class="fsc-control fsc-save" data-type="moon-phase" data-moon-index="{{@index}}"><span class="fa fa-plus"></span> {{localize 'FSC.Configuration.Moon.PhaseAdd'}}</button>
+                                <button class="fsc-control fsc-save" data-type="moon-phase" data-moon-index="{{@index}}"><span class="fa-solid fa-plus"></span> {{localize 'FSC.Configuration.Moon.PhaseAdd'}}</button>
                                 <span class="fsc-spacer"></span>
-                                <button class="fsc-control fsc-delete" data-type="moon-phase" data-moon-index="{{@index}}" data-index="all"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Moon.PhaseRemoveAll'}}</button>
+                                <button class="fsc-control fsc-delete" data-type="moon-phase" data-moon-index="{{@index}}" data-index="all"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Moon.PhaseRemoveAll'}}</button>
                             </div>
                         </div>
                     </div>
                     {{/each}}
                 </div>
                 <div class="fsc-table-actions">
-                    <button class="fsc-control fsc-save" data-type="moon"><span class="fa fa-plus"></span> {{localize 'FSC.Configuration.Moon.Add'}}</button>
+                    <button class="fsc-control fsc-save" data-type="moon"><span class="fa-solid fa-plus"></span> {{localize 'FSC.Configuration.Moon.Add'}}</button>
                     <span class="fsc-spacer"></span>
-                    <button class="fsc-control fsc-delete" data-type="moon" data-index="all"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Moon.RemoveAll'}}</button>
+                    <button class="fsc-control fsc-delete" data-type="moon" data-index="all"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Moon.RemoveAll'}}</button>
                 </div>
             </div>
         </div>
         <div class="tab fsc-time-settings" data-tab="timeSettings">
             <div class="fsc-section fsc-open">
-                <h2>{{localize 'FSC.Configuration.Time.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/time-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Time.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/time-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open">
                     <label for="scHoursInDay">{{localize 'FSC.Configuration.Time.HoursInDay'}}</label>
                     <div class="form-fields">
@@ -1204,7 +1204,7 @@
                 </div>
             </div>
             <div class="fsc-section fsc-open">
-                <h2>{{localize 'FSC.Configuration.Time.ClockSettings'}} <a href="https://simplecalendar.info/docs/calendar-configuration/time-settings#clock-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Time.ClockSettings'}} <a href="https://simplecalendar.info/docs/calendar-configuration/time-settings#clock-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open">
                     <label for="scShowClock">{{localize 'FSC.Configuration.General.ShowClock'}}</label>
                     <div class="form-fields">
@@ -1237,7 +1237,7 @@
         </div>
         <div class="tab fsc-note-settings" data-tab="noteSettings">
             <div class="fsc-settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Notes.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/note-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Notes.Title'}} <a href="https://simplecalendar.info/docs/calendar-configuration/note-settings" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="form-group fsc-open">
                     <label for="scDefaultPlayerVisibility">{{localize 'FSC.Configuration.DefaultNoteVisibility'}}</label>
                     <div class="form-fields">
@@ -1254,7 +1254,7 @@
                 </div>
             </div>
             <div class="fsc-settings-group fsc-open">
-                <h2>{{localize 'FSC.Configuration.Notes.NoteCategories'}} <a href="https://simplecalendar.info/docs/calendar-configuration/note-settings#note-categories" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa fa-question-circle"></a></h2>
+                <h2>{{localize 'FSC.Configuration.Notes.NoteCategories'}} <a href="https://simplecalendar.info/docs/calendar-configuration/note-settings#note-categories" data-tooltip="{{localize 'FSC.Help'}}" target="_blank" class="fa-solid fa-question-circle"></a></h2>
                 <div class="fsc-hidden-label">
                     <label id="fsc-note-categories-name">{{localize 'FSC.Configuration.NoteCategories.NameHelp'}}</label>
                     <label id="fsc-note-categories-color">{{localize 'FSC.Configuration.NoteCategories.ColorHelp'}}</label>
@@ -1276,15 +1276,15 @@
                                 <input id="-noteCategoryColor{{@index}}" type="color" value="{{color}}" class="fsc-note-category-color" aria-describedby="fsc-note-categories-color" />
                             </div>
                             <div class="fsc-col">
-                                <button class="fsc-control fsc-delete" data-type="note-category"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
+                                <button class="fsc-control fsc-delete" data-type="note-category"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.Month.Remove'}}</button>
                             </div>
                         </div>
                     {{/each}}
                 </div>
                 <div class="fsc-table-actions">
-                    <button class="fsc-control fsc-save" data-type="note-category"><span class="fa fa-plus"></span> {{localize 'FSC.Configuration.NoteCategories.Add'}}</button>
+                    <button class="fsc-control fsc-save" data-type="note-category"><span class="fa-solid fa-plus"></span> {{localize 'FSC.Configuration.NoteCategories.Add'}}</button>
                     <span class="fsc-spacer"></span>
-                    <button class="fsc-control fsc-delete" data-type="note-category" data-index="all"><span class="fa fa-trash"></span> {{localize 'FSC.Configuration.NoteCategories.RemoveAll'}}</button>
+                    <button class="fsc-control fsc-delete" data-type="note-category" data-index="all"><span class="fa-solid fa-trash"></span> {{localize 'FSC.Configuration.NoteCategories.RemoveAll'}}</button>
                 </div>
             </div>
         </div>
@@ -1328,7 +1328,7 @@
     </div>
     <div class="fsc-config-save">
         <button class="fsc-control fsc-save" id="scSave" type="button" data-tooltip="{{localize 'FSC.Configuration.Save'}}">
-            <i class="far fa-save"></i> {{localize 'FSC.Configuration.Save'}}
+            <i class="fa-regular fa-save"></i> {{localize 'FSC.Configuration.Save'}}
         </button>
     </div>
 </form>

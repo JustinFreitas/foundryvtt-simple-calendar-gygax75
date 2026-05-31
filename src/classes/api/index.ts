@@ -1702,12 +1702,12 @@ export function runMigration(): void {
             content: GameSettings.Localize("FSC.Migration.APIDialog.Content"),
             buttons: {
                 yes: {
-                    icon: '<i class="fas fa-check"></i>',
+                    icon: '<i class="fa-solid fa-check"></i>',
                     label: GameSettings.Localize("FSC.Confirm"),
                     callback: MigrationApplication.run.bind(MigrationApplication, true)
                 },
                 no: {
-                    icon: '<i class="fas fa-times"></i>',
+                    icon: '<i class="fa-solid fa-times"></i>',
                     label: GameSettings.Localize("FSC.Cancel")
                 }
             },

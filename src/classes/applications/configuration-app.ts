@@ -1134,9 +1134,9 @@ export default class ConfigurationApp extends FormApplication {
                 animateElement(options, 400);
             }
             if (showAdvanced) {
-                (<HTMLElement>button).innerHTML = `<i class="fa fa-chevron-up"></i><span>${GameSettings.Localize("FSC.HideAdvanced")}</span>`;
+                (<HTMLElement>button).innerHTML = `<i class="fa-solid fa-chevron-up"></i><span>${GameSettings.Localize("FSC.HideAdvanced")}</span>`;
             } else {
-                (<HTMLElement>button).innerHTML = `<i class="fa fa-chevron-down"></i><span>${GameSettings.Localize("FSC.ShowAdvanced")}</span>`;
+                (<HTMLElement>button).innerHTML = `<i class="fa-solid fa-chevron-down"></i><span>${GameSettings.Localize("FSC.ShowAdvanced")}</span>`;
             }
         }
     }
@@ -1153,7 +1153,7 @@ export default class ConfigurationApp extends FormApplication {
             }
             const a = this.appWindow.querySelector(`.fsc-display-options .fsc-tokens .fsc-date-format-token-show .fa`);
             if (a) {
-                (<HTMLElement>a).className = `fa ${this.uiElementStates.dateFormatTableExpanded ? "fa-chevron-up" : "fa-chevron-down"}`;
+                (<HTMLElement>a).className = `fa-solid ${this.uiElementStates.dateFormatTableExpanded ? "fa-chevron-up" : "fa-chevron-down"}`;
             }
         }
     }
@@ -1487,12 +1487,12 @@ export default class ConfigurationApp extends FormApplication {
             content: content,
             buttons: {
                 yes: {
-                    icon: '<i class="fas fa-check"></i>',
+                    icon: '<i class="fa-solid fa-check"></i>',
                     label: GameSettings.Localize("FSC.Confirm"),
                     callback: this.confirmationDialogYes.bind(this, contentType, args)
                 },
                 no: {
-                    icon: '<i class="fas fa-times"></i>',
+                    icon: '<i class="fa-solid fa-times"></i>',
                     label: GameSettings.Localize("FSC.Cancel")
                 }
             },
@@ -1708,12 +1708,12 @@ export default class ConfigurationApp extends FormApplication {
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(res, "globalConfig") && !isObjectEmpty(res.globalConfig)) {
-                    html += `<li><label><input type="checkbox" data-id="global" checked /><span class="fa fa-cog"></span>&nbsp;${GameSettings.Localize(
+                    html += `<li><label><input type="checkbox" data-id="global" checked /><span class="fa-solid fa-cog"></span>&nbsp;${GameSettings.Localize(
                         "FSC.Configuration.Global.Title"
                     )}</label></li>`;
                 }
                 if (Object.prototype.hasOwnProperty.call(res, "permissions") && !isObjectEmpty(res.permissions)) {
-                    html += `<li><label><input type="checkbox" data-id="permissions" checked /><span class="fa fa-key"></span>&nbsp;${GameSettings.Localize(
+                    html += `<li><label><input type="checkbox" data-id="permissions" checked /><span class="fa-solid fa-key"></span>&nbsp;${GameSettings.Localize(
                         "Permissions"
                     )}</label></li>`;
                 }
@@ -1721,7 +1721,7 @@ export default class ConfigurationApp extends FormApplication {
                     for (let i = 0; i < res.calendars.length; i++) {
                         html += `<li><label><input type="checkbox" data-id="${
                             res.calendars[i].id
-                        }" checked /><strong><span class="fa fa-calendar"></span> ${res.calendars[i].name}</strong>: ${GameSettings.Localize(
+                        }" checked /><strong><span class="fa-solid fa-calendar"></span> ${res.calendars[i].name}</strong>: ${GameSettings.Localize(
                             "FSC.CalendarConfiguration"
                         )}</label><label>${GameSettings.Localize("FSC.ImportInto")}:&nbsp;<select data-for-cal="${res.calendars[i].id}">`;
                         const selectedIndex = this.calendars.findIndex((c) => {
@@ -1740,7 +1740,7 @@ export default class ConfigurationApp extends FormApplication {
                         ) {
                             html += `<li><label><input type="checkbox" data-id="${
                                 res.calendars[i].id
-                            }-notes" checked /><strong><span class="fa fa-sticky-note"></span> ${
+                            }-notes" checked /><strong><span class="fa-solid fa-sticky-note"></span> ${
                                 res.calendars[i].name
                             }</strong>: ${GameSettings.Localize("FSC.CalendarNotes")}</label></label></li>`;
                         }
@@ -1749,7 +1749,7 @@ export default class ConfigurationApp extends FormApplication {
                 if (Object.hasOwn(res, "notes")) {
                     for (const key in res.notes) {
                         if (Object.hasOwn(res.notes, key)) {
-                            html += `<li><label><input type="checkbox" data-id="${key}-notes" checked /><strong><span class="fa fa-sticky-note"></span> ${
+                            html += `<li><label><input type="checkbox" data-id="${key}-notes" checked /><strong><span class="fa-solid fa-sticky-note"></span> ${
                                 this.calendars.find((c) => {
                                     return c.id.indexOf(key) === 0;
                                 })?.name || key
@@ -1769,7 +1769,7 @@ export default class ConfigurationApp extends FormApplication {
                         }
                     }
                 }
-                html += `</ul><button class="fsc-control fsc-save" id="importCalendar"><i class="fa fa-file-import"></i> ${GameSettings.Localize(
+                html += `</ul><button class="fsc-control fsc-save" id="importCalendar"><i class="fa-solid fa-file-import"></i> ${GameSettings.Localize(
                     "FSC.Import"
                 )}</button>`;
                 fDetail.innerHTML = html;

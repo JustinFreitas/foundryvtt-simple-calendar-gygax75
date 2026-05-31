@@ -47,11 +47,11 @@ export default class CalendarFull {
 
             HTML = `<div class="fsc-year-view-wrapper" id="${options.id}"><div class="fsc-current-year">`;
             if (options.allowChangeMonth) {
-                HTML += `<a class="fa fa-chevron-left" data-tooltip="${GameSettings.Localize("FSC.ChangePreviousMonth")}"></a>`;
+                HTML += `<a class="fa-solid fa-chevron-left" data-tooltip="${GameSettings.Localize("FSC.ChangePreviousMonth")}"></a>`;
             }
             HTML += `<span>${vYear}</span>`;
             if (options.allowChangeMonth) {
-                HTML += `<a class="fa fa-chevron-right" data-tooltip="${GameSettings.Localize("FSC.ChangeNextMonth")}"></a>`;
+                HTML += `<a class="fa-solid fa-chevron-right" data-tooltip="${GameSettings.Localize("FSC.ChangeNextMonth")}"></a>`;
             }
             HTML += "</div>";
             HTML += `<div  class="fsc-year-view">`;
@@ -151,7 +151,7 @@ export default class CalendarFull {
         //Visible date change and current date
         html += `<div class="fsc-current-date">`;
         if (options.allowChangeMonth) {
-            html += `<a class="fa fa-chevron-left" data-tooltip="${GameSettings.Localize("FSC.ChangePreviousMonth")}"></a>`;
+            html += `<a class="fa-solid fa-chevron-left" data-tooltip="${GameSettings.Localize("FSC.ChangePreviousMonth")}"></a>`;
         } else {
             html += `<span></span>`;
         }
@@ -164,7 +164,7 @@ export default class CalendarFull {
             { year: options.editYear }
         )}</span>`;
         if (options.allowChangeMonth) {
-            html += `<a class="fa fa-chevron-right" data-tooltip="${GameSettings.Localize("FSC.ChangeNextMonth")}"></a>`;
+            html += `<a class="fa-solid fa-chevron-right" data-tooltip="${GameSettings.Localize("FSC.ChangeNextMonth")}"></a>`;
         } else {
             html += `<span></span>`;
         }
@@ -300,9 +300,9 @@ export default class CalendarFull {
                 const canChangeTime = canUser((<Game>game).user, SC.globalConfiguration.permissions.changeDateTime);
                 const canAddNote = canUser((<Game>game).user, SC.globalConfiguration.permissions.addNotes);
                 html += `<div class="fsc-context-menu fsc-hide" data-type="day"><div class="fsc-day-context-list" data-date=""><div class="fsc-context-list-title"></div>`;
-                html += `<div class="fsc-context-list-expand fsc-sunrise-sunset"><span class="fa fa-sun"></span>${GameSettings.Localize(
+                html += `<div class="fsc-context-list-expand fsc-sunrise-sunset"><span class="fa-solid fa-sun"></span>${GameSettings.Localize(
                     "FSC.Configuration.Season.SunriseSunset"
-                )}<span class="fa fa-caret-right"></span><div class="fsc-context-list-sub-menu"><div class="fsc-context-list-text"><strong>${GameSettings.Localize(
+                )}<span class="fa-solid fa-caret-right"></span><div class="fsc-context-list-sub-menu"><div class="fsc-context-list-text"><strong>${GameSettings.Localize(
                     "FSC.Sunrise"
                 )}</strong>: <span class="fsc-sunrise"></span></div><div class="fsc-context-list-text"><strong>${GameSettings.Localize(
                     "FSC.Sunset"
@@ -310,12 +310,12 @@ export default class CalendarFull {
                 if (canChangeTime || canAddNote) {
                     html += `<div class="fsc-context-list-break"></div>`;
                     if (canChangeTime) {
-                        html += `<div class="fsc-context-list-action" data-action="current"><span class="fa fa-calendar-check"></span>${GameSettings.Localize(
+                        html += `<div class="fsc-context-list-action" data-action="current"><span class="fa-solid fa-calendar-check"></span>${GameSettings.Localize(
                             "FSC.SetCurrentDate"
                         )}</div>`;
                     }
                     if (canAddNote) {
-                        html += `<div class="fsc-context-list-action" data-action="note"><span class="fa fa-sticky-note"></span>${GameSettings.Localize(
+                        html += `<div class="fsc-context-list-action" data-action="note"><span class="fa-solid fa-sticky-note"></span>${GameSettings.Localize(
                             "FSC.Notes.AddNew"
                         )}</div>`;
                     }
@@ -791,7 +791,7 @@ export default class CalendarFull {
         } else {
             html = `<div class="fsc-moon-group-wrapper">${
                 moonHtml[0]
-            }<span class="fsc-moon-phase fa fa-caret-down"></span><div class="fsc-moon-group ${lastDayOfWeek ? "fsc-left" : "fsc-right"} ${
+            }<span class="fsc-moon-phase fa-solid fa-caret-down"></span><div class="fsc-moon-group ${lastDayOfWeek ? "fsc-left" : "fsc-right"} ${
                 lastWeekOfMonth ? "fsc-bottom" : "fsc-top"
             }">${moonHtml.join("")}</div></div>`;
         }

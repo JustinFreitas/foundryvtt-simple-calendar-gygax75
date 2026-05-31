@@ -202,12 +202,12 @@ export class NoteSheet extends JournalSheet {
                 content: GameSettings.Localize("FSC.NoteDirtyText"),
                 buttons: {
                     yes: {
-                        icon: '<i class="fas fa-trash"></i>',
+                        icon: '<i class="fa-solid fa-trash"></i>',
                         label: GameSettings.Localize("FSC.DiscardChanges"),
                         callback: this.isDirtyDialogClose.bind(this, false)
                     },
                     save: {
-                        icon: '<i class="fas fa-save"></i>',
+                        icon: '<i class="fa-solid fa-save"></i>',
                         label: GameSettings.Localize("FSC.Save"),
                         callback: this.isDirtyDialogClose.bind(this, true)
                     }
@@ -1116,12 +1116,12 @@ export class NoteSheet extends JournalSheet {
             content: GameSettings.Localize("FSC.DeleteConfirmText"),
             buttons: {
                 yes: {
-                    icon: '<i class="fas fa-trash"></i>',
+                    icon: '<i class="fa-solid fa-trash"></i>',
                     label: GameSettings.Localize("FSC.Delete"),
                     callback: this.deleteConfirm.bind(this)
                 },
                 no: {
-                    icon: '<i class="fas fa-times"></i>',
+                    icon: '<i class="fa-solid fa-times"></i>',
                     label: GameSettings.Localize("FSC.Cancel")
                 }
             },
