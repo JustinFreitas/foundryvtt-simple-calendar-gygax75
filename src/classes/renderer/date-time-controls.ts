@@ -122,7 +122,8 @@ export class DateTimeControls {
                 let buttonClass = "fsc-control fsc-primary";
                 let buttonText = `${btn[i].amount}&nbsp;${btn[i].text}`;
                 if (btn[i].type === 'day') {
-                    buttonText += ` <span class="fa-solid fa-caret-down"></span>`;
+                    const isOpen = options.fullDisplay?.dateTimeUnitOpen || false;
+                    buttonText += ` <span class="fa-solid fa-caret-${isOpen ? 'up' : 'down'}"></span>`;
                 }
                 html += `<button class="${buttonClass}" data-tooltip="${btn[i].amount} ${btn[i].tooltip}" data-type="${btn[i].type}" data-amount="${btn[i].amount}">${buttonText}</button>`;
             }
