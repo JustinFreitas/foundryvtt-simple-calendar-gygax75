@@ -332,7 +332,7 @@ export default class SCController {
                 tokenControls.tools.calendar = {
                     name: "calendar",
                     title: "FSC.Title",
-                    icon: "fas fa-calendar simple-calendar-icon",
+                    icon: "fa-solid fa-calendar simple-calendar-icon",
                     button: true,
                     onClick: MainApplication.sceneControlButtonClick.bind(MainApplication)
                 };

@@ -276,12 +276,12 @@ export class DateSelector {
                     useCalendarClones: this.useCloneCalendars
                 });
                 if (this.showDateSelector) {
-                    timeSelectors += `<div class="fsc-remove-time"><button class="fsc-control fsc-delete"><i class="fa fa-times"></i> ${GameSettings.Localize(
+                    timeSelectors += `<div class="fsc-remove-time"><button class="fsc-control fsc-delete"><i class="fa-solid fa-times"></i> ${GameSettings.Localize(
                         "FSC.RemoveTime"
                     )}</button></div>`;
                 }
             } else {
-                timeSelectors += `<div class="fsc-add-time"><button class="fsc-control fsc-primary"><i class="fa fa-clock"></i> ${GameSettings.Localize(
+                timeSelectors += `<div class="fsc-add-time"><button class="fsc-control fsc-primary"><i class="fa-solid fa-clock"></i> ${GameSettings.Localize(
                     "FSC.Notes.DateTime.AllDay"
                 )}</button></div>`;
             }

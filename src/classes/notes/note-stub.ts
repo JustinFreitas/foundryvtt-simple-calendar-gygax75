@@ -36,7 +36,7 @@ export default class NoteStub {
                     ChatMessage.create({
                         speaker: { alias: "Simple Calendar Reminder" },
                         whisper: [GameSettings.UserID()],
-                        content: `<h2>${note.title}</h2><div style="display: flex;margin-bottom: 0.5rem;"><div class="note-category"><span class="fa fa-calendar"></span> ${note.fullDisplayDate}</div></div>${note.link}`
+                        content: `<h2>${note.title}</h2><div style="display: flex;margin-bottom: 0.5rem;"><div class="note-category"><span class="fa-solid fa-calendar"></span> ${note.fullDisplayDate}</div></div>${note.link}`
                     }).catch(Logger.error);
                 } else if (SC.clientSettings.noteReminderNotification === NoteReminderNotificationType.render) {
                     note.render();

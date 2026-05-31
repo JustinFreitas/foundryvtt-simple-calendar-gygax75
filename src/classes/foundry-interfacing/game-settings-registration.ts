@@ -154,14 +154,14 @@ export default class GameSettingsRegistration {
             name: "",
             label: "FSC.Title",
             hint: "",
-            icon: "fa fa-calendar",
+            icon: "fa-solid fa-calendar",
             type: MainAppConfigWrapper
         });
         (<Game>game).settings.registerMenu(ModuleName, SettingNames.CalendarConfigurationMenu, {
             name: "",
             label: "FSC.Configuration.Title",
             hint: "",
-            icon: "fa fa-cog",
+            icon: "fa-solid fa-cog",
             type: ConfigurationApp
         });
         // -------------------

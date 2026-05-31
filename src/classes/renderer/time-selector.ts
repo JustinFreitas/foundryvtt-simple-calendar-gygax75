@@ -23,7 +23,7 @@ export default class TimeSelector {
         //Hidden Options
         html += `<input class="fsc-render-options" type="hidden" value="${encodeURIComponent(
             JSON.stringify(options)
-        )}"/><span class="far fa-clock"></span>`;
+        )}"/><span class="fa-regular fa-clock"></span>`;
 
         if (options.allowTimeRange) {
             html += this.RenderTimeInputGroup(calendar, "fsc-start-time", options.selectedTime?.start);
