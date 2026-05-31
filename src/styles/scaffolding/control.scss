@@ -3,10 +3,10 @@
   &.window-app{
     .window-content{
       button.fsc-control {
-        display: block;
-        position: relative;
-        font-family: var(--font-family) !important;
-        font-size: pxToRem(14, true);
+      display: block;
+      position: relative;
+      font-family: var(--font-family), $icon-font-family !important;
+      font-size: pxToRem(14, true);
         border: var(--btn-border);
         border-image: var(--btn-border-image) !important;
         background-image: var(--btn-bg-image) !important;
