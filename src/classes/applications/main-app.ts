@@ -119,7 +119,8 @@ export default class MainApp extends FormApplication {
                 currentSeasonName: "",
                 currentSeasonIcon: "",
                 selectedDayMoons: <any>[],
-                dateTimeControlDisplay: this.activeCalendar.generalSettings.compactViewOptions.controlLayout
+                dateTimeControlDisplay: this.activeCalendar.generalSettings.compactViewOptions.controlLayout,
+                dateTimeUnitOpen: this.uiElementStates.dateTimeUnitOpen
             },
             mainViewDisplay: {
                 calendarList: <any>[],
