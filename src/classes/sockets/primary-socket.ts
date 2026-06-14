@@ -72,6 +72,8 @@ export default class PrimarySocket extends SocketBase {
                                     this.primaryCheckTimeoutCall();
                                 }
                                 MainApplication.uiElementStates.primaryCheckRunning = false;
+                                //Re-render so the loading spinner is replaced now that the check has resolved.
+                                MainApplication.updateApp();
                                 r(true);
                             }).bind(this, resolve),
                             this.checkDuration
@@ -83,10 +85,14 @@ export default class PrimarySocket extends SocketBase {
                 //before taking over so any render triggered while taking over shows the controls instead of the spinner.
                 MainApplication.uiElementStates.primaryCheckRunning = false;
                 await this.primaryCheckTimeoutCall();
+                //Re-render so the loading spinner is replaced now that the check has resolved.
+                MainApplication.updateApp();
                 return true;
             }
         } else {
             MainApplication.uiElementStates.primaryCheckRunning = false;
+            //Re-render so the loading spinner is replaced now that the check has resolved.
+            MainApplication.updateApp();
             return true;
         }
     }

@@ -46,6 +46,7 @@ describe("Primary Socket Tests", () => {
 
     test("Initialize", async () => {
         const primaryCheckTimeoutSpy = jest.spyOn(s, "primaryCheckTimeoutCall").mockImplementation(async () => {});
+        const updateAppSpy = jest.spyOn(MainApplication, "updateApp").mockImplementation(() => {});
 
         //User is not GM
         //@ts-ignore
@@ -53,6 +54,8 @@ describe("Primary Socket Tests", () => {
         let r = await s.initialize();
         expect(r).toBe(true);
         expect(MainApplication.uiElementStates.primaryCheckRunning).toBe(false);
+        //The app is re-rendered so the loading spinner is replaced once the check resolves.
+        expect(updateAppSpy).toHaveBeenCalledTimes(1);
 
         // Undefined users
         //@ts-ignore
@@ -71,6 +74,8 @@ describe("Primary Socket Tests", () => {
         expect(r).toBe(true);
         expect(primaryCheckTimeoutSpy).toHaveBeenCalledTimes(2);
         expect(MainApplication.uiElementStates.primaryCheckRunning).toBe(false);
+        //Each resolved check re-renders to clear the spinner: non-GM branch, undefined-users (single-GM path), and this "Only 1 GM" call.
+        expect(updateAppSpy).toHaveBeenCalledTimes(3);
 
         // Multiple GMs
         //@ts-ignore
