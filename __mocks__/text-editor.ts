@@ -18,3 +18,11 @@ class TE {
 
 //@ts-ignore
 global.TextEditor = new TE();
+//@ts-ignore
+global.foundry = global.foundry || {};
+//@ts-ignore
+global.foundry.applications = global.foundry.applications || {};
+//@ts-ignore
+global.foundry.applications.ux = global.foundry.applications.ux || {};
+//@ts-ignore
+global.foundry.applications.ux.TextEditor = { implementation: global.TextEditor };

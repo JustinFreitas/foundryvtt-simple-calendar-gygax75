@@ -210,7 +210,7 @@ describe("Main App Class Tests", () => {
         //@ts-ignore
         global.$ = jest.fn().mockReturnValue(jquery);
         //@ts-ignore
-        global.renderTemplate = jest.fn().mockReturnValue(null);
+        foundry.applications.handlebars.renderTemplate = jest.fn().mockReturnValue(null);
 
         ma.options["classes"] = [];
         //@ts-ignore
@@ -219,7 +219,8 @@ describe("Main App Class Tests", () => {
         await ma._renderOuter();
         //@ts-ignore
         expect(global.$).toHaveBeenCalledTimes(1);
-        expect(global.renderTemplate).toHaveBeenCalledTimes(1);
+        //@ts-ignore
+        expect(foundry.applications.handlebars.renderTemplate).toHaveBeenCalledTimes(1);
         expect(jquery.css).toHaveBeenCalledTimes(1);
 
         //@ts-ignore

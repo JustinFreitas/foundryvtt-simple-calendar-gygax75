@@ -238,6 +238,14 @@ if(!global.foundry.applications.api.ApplicationV2) global.foundry.applications.a
 //@ts-ignore
 global.foundry.applications.api.ApplicationV2._maxZ = 100;
 //@ts-ignore
+global.foundry.applications.handlebars = global.foundry.applications.handlebars || {};
+//@ts-ignore
+global.foundry.applications.handlebars.renderTemplate = global.foundry.applications.handlebars.renderTemplate || (() => null);
+//@ts-ignore
+global.foundry.applications.ux = global.foundry.applications.ux || {};
+//@ts-ignore
+global.foundry.applications.ux.Draggable = global.foundry.applications.ux.Draggable || { implementation: (<any>window).Draggable };
+//@ts-ignore
 global.foundry.documents = global.foundry.documents || {};
 //@ts-ignore
 global.foundry.documents.collections = global.foundry.documents.collections || {};

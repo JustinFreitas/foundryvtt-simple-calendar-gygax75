@@ -320,10 +320,10 @@ export class NoteSheet extends JournalSheet {
         if (noteStub) {
             newOptions.name = this.journalData.name;
             if (this.journalPages[this.uiElementStates.selectedPageIndex].type === "text") {
-                newOptions.enrichedContent = `<section>${await TextEditor.enrichHTML(
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore - foundry.applications.ux.TextEditor is the v13+ namespaced replacement for the deprecated global TextEditor; not present in the v9 League types.
+                newOptions.enrichedContent = `<section>${await foundry.applications.ux.TextEditor.implementation.enrichHTML(
                     this.journalPages[this.uiElementStates.selectedPageIndex].text?.content || "",
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    //@ts-ignore
                     { async: true }
                 )}</section>`;
             } else if (this.journalPages[this.uiElementStates.selectedPageIndex].type === "image") {

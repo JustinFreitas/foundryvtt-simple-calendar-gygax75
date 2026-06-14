@@ -351,7 +351,9 @@ export default class MainApp extends FormApplication {
         };
 
         // Render the template and return the promise
-        const template = await renderTemplate("templates/app-window.html", windowData);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore - foundry.applications.handlebars.renderTemplate is the v13+ namespaced replacement for the deprecated global; not in the v9 League types.
+        const template = await foundry.applications.handlebars.renderTemplate("templates/app-window.html", windowData);
         let html = $(template);
 
         // Activate header button click listeners after a slight timeout to prevent immediate interaction
@@ -359,6 +361,9 @@ export default class MainApp extends FormApplication {
 
         // Make the outer window draggable
         const header = html.find("header")[0];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore - foundry.applications.ux.Draggable is the v13+ namespaced replacement for the deprecated global; not in the v9 League types.
+        const Draggable = foundry.applications.ux.Draggable.implementation;
         new Draggable(this, html, header, this.options.resizable);
         const drag = new Draggable(this, html, header, this.options.resizable);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
