@@ -23,6 +23,11 @@ describe('Renderer DateTimeControls Class Tests', () => {
         };
         expect(DateTimeControls.Render()).toContain('fsc-unit-controls');
         expect(DateTimeControls.Render(options)).toContain('fsc-open');
+        //Selector caret reflects the open state (up when open, down when closed)
+        expect(DateTimeControls.Render(options)).toContain('fa-caret-up');
+        options.fullDisplay.dateTimeUnitOpen = false;
+        expect(DateTimeControls.Render(options)).toContain('fa-caret-down');
+        options.fullDisplay.dateTimeUnitOpen = true;
         options.fullDisplay.unit = "round";
         expect(DateTimeControls.Render(options)).toContain('fsc-selected');
         options.fullDisplay.unit = "minute";

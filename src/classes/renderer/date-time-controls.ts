@@ -28,7 +28,7 @@ export class DateTimeControls {
                             .fullDisplay?.unit}" data-amount="-1"><span class="fa-solid fa-angle-left"></span></button>
                         <button class="fsc-control fsc-primary fsc-selector" data-unit="time">${GameSettings.Localize(
                             options.fullDisplay?.unitText || ""
-                        )}&nbsp;</button>
+                        )}&nbsp;<span class="fa-solid fa-caret-${options.fullDisplay?.dateTimeUnitOpen ? "up" : "down"}"></span></button>
                         <button class="fsc-control fsc-primary" data-tooltip="${GameSettings.Localize("FSC.MoveForwardOne")}" data-type="${options
                             .fullDisplay?.unit}" data-amount="1"><span class="fa-solid fa-angle-right"></span></button>
                         <button class="fsc-control fsc-primary" data-tooltip="${GameSettings.Localize("FSC.MoveForwardFive")}" data-type="${options

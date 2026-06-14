@@ -203,16 +203,11 @@
         }
 
         .fsc-selector{
-          &::after{
-            font-family: $icon-font-family;
-            content: "\f0d7";
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-font-smoothing: antialiased;
+          // The caret is rendered as a real Font Awesome <span> element in the button markup
+          // (see date-time-controls.ts) so it resolves against the installed FA edition rather
+          // than a hardcoded family/glyph that breaks across FA versions.
+          .fa-solid{
             font-size: pxToRem(12);
-            font-weight: 900;
-            font-style: normal;
-            font-variant: normal;
-            text-rendering: auto;
           }
         }
         .fsc-unit-list{
