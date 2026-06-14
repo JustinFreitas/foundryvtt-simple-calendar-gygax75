@@ -11,6 +11,7 @@ import "./folder";
 import "./foundry";
 import "./form-application";
 import "./game";
+import "./application-v2";
 import "./handlebars";
 import "./hooks";
 import "./journal";

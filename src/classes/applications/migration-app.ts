@@ -6,12 +6,49 @@ import { CalManager, MainApplication, SC } from "../index";
 import { isObjectEmpty } from "../utilities/object";
 import { GetThemeName } from "../utilities/visual";
 
-export default class MigrationApp extends Application {
+// The v13+ ApplicationV2 framework lives under foundry.applications.api and is not present in the v9 League types.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+const ApplicationV2 = foundry.applications.api.ApplicationV2;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+const HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+export default class MigrationApp extends HandlebarsApplicationMixin(ApplicationV2) {
     /**
      * The ID used for the application window within foundry
      * @type {string}
      */
     public static appWindowId: string = "fsc-migration-application";
+
+    /**
+     * The default application options (ApplicationV2)
+     */
+    static DEFAULT_OPTIONS = {
+        id: MigrationApp.appWindowId,
+        classes: ["simple-calendar"],
+        window: {
+            title: "FSC.Migration.Title",
+            resizable: false
+        },
+        position: {
+            width: 500
+        },
+        actions: {
+            clean: MigrationApp.onCleanAction
+        }
+    };
+
+    /**
+     * The Handlebars template parts (ApplicationV2 + HandlebarsApplicationMixin)
+     */
+    static PARTS = {
+        body: {
+            template: "modules/foundryvtt-simple-calendar/templates/migration.html"
+        }
+    };
 
     public MigrationType: MigrationTypes = MigrationTypes.none;
 
@@ -24,44 +61,47 @@ export default class MigrationApp extends Application {
     };
 
     /**
-     * Migration App constructor
-     */
-    constructor() {
-        super();
-    }
-
-    /**
-     * Returns the default options for this application
-     */
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "modules/foundryvtt-simple-calendar/templates/migration.html";
-        options.title = "FSC.Migration.Title";
-        options.classes = ["simple-calendar"];
-        options.id = this.appWindowId;
-        options.resizable = false;
-        options.width = 500;
-        return options;
-    }
-
-    /**
      * Shows the application window
      */
     public showApp() {
-        this.render(true, { classes: ["simple-calendar", GetThemeName()] });
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore - render is provided by ApplicationV2, which is untyped in the v9 League types.
+        this.render({ force: true });
     }
 
     /**
-     *
-     * @param options
+     * Prepares the rendering context for the template (ApplicationV2 replacement for getData)
      */
-    getData(options?: Partial<ApplicationOptions>): object | Promise<object> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    async _prepareContext(): Promise<object> {
         return {
-            ...super.getData(options),
             display: this.displayData,
             headingTitle: this.headingTitle,
             description: this.description
         };
+    }
+
+    /**
+     * Applies the current theme class after each render (ApplicationV2 replacement for per-render classes)
+     */
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    _onRender(context: object, options: object) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        super._onRender(context, options);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        this.element?.classList.add(GetThemeName());
+    }
+
+    /**
+     * ApplicationV2 action handler for the "clean" button (data-action="clean").
+     * Bound to the application instance by the framework.
+     */
+    static onCleanAction(this: MigrationApp) {
+        this.runCleanData();
     }
 
     get headingTitle() {
@@ -93,13 +133,6 @@ export default class MigrationApp extends Application {
     public initialize() {
         if (GameSettings.IsGm()) {
             this.determineMigrationType();
-        }
-    }
-
-    activateListeners() {
-        const appWindow = document.getElementById(MigrationApp.appWindowId);
-        if (appWindow) {
-            appWindow.querySelector(".fsc-clean")?.addEventListener("click", this.runCleanData.bind(this));
         }
     }
 

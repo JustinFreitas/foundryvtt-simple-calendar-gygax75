@@ -30,17 +30,23 @@ describe("Migration App Class Tests", () => {
     });
 
     test("Default Options", () => {
-        expect(MigrationApp.defaultOptions).toBeDefined();
+        expect(MigrationApp.DEFAULT_OPTIONS).toBeDefined();
+        expect(MigrationApp.PARTS.body.template).toBeDefined();
     });
 
     test("Show App", () => {
+        //@ts-ignore
         jest.spyOn(ma, "render").mockImplementation(() => {});
         ma.showApp();
+        //@ts-ignore
         expect(ma.render).toHaveBeenCalledTimes(1);
+        //@ts-ignore
+        expect(ma.render).toHaveBeenCalledWith({ force: true });
     });
 
-    test("Get Data", () => {
-        expect(ma.getData()).toBeDefined();
+    test("Prepare Context", async () => {
+        //@ts-ignore
+        expect(await ma._prepareContext()).toBeDefined();
     });
 
     test("Heading Title", () => {
@@ -65,15 +71,11 @@ describe("Migration App Class Tests", () => {
         expect(ma.determineMigrationType).toHaveBeenCalledTimes(1);
     });
 
-    test("Activate Listeners", () => {
-        const app = document.createElement("div");
-
-        jest.spyOn(document, "getElementById").mockReturnValue(app);
-        jest.spyOn(app, "querySelector").mockReturnValue(document.createElement("div"));
-
-        //@ts-ignore
-        ma.activateListeners({});
-        expect(app.querySelector).toHaveBeenCalledTimes(1);
+    test("On Clean Action", () => {
+        jest.spyOn(ma, "runCleanData").mockImplementation(() => {});
+        // The framework binds the action handler to the application instance
+        MigrationApp.onCleanAction.call(ma);
+        expect(ma.runCleanData).toHaveBeenCalledTimes(1);
     });
 
     test("Determine Migration Type", () => {

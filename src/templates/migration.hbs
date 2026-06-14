@@ -21,7 +21,7 @@
             </div>
         </li>
         <li>
-            <button class="fsc-control fsc-delete fsc-clean" {{#unless display.enableCleanUp}}disabled{{/unless}}>{{localize 'FSC.Migration.v1v2.Cleanup'}}</button>
+            <button class="fsc-control fsc-delete fsc-clean" data-action="clean" {{#unless display.enableCleanUp}}disabled{{/unless}}>{{localize 'FSC.Migration.v1v2.Cleanup'}}</button>
         </li>
     </ul>
     {{#if display.migrationDone}}
