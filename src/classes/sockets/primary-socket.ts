@@ -79,6 +79,9 @@ export default class PrimarySocket extends SocketBase {
                     });
                 });
             } else {
+                //Only 1 GM in the world, take over as primary immediately. Clear the primary check loading state
+                //before taking over so any render triggered while taking over shows the controls instead of the spinner.
+                MainApplication.uiElementStates.primaryCheckRunning = false;
                 await this.primaryCheckTimeoutCall();
                 return true;
             }

@@ -66,9 +66,11 @@ describe("Primary Socket Tests", () => {
 
         // Only 1 GM
         (<Game>game).users = users;
+        MainApplication.uiElementStates.primaryCheckRunning = true;
         r = await s.initialize();
         expect(r).toBe(true);
         expect(primaryCheckTimeoutSpy).toHaveBeenCalledTimes(2);
+        expect(MainApplication.uiElementStates.primaryCheckRunning).toBe(false);
 
         // Multiple GMs
         //@ts-ignore
