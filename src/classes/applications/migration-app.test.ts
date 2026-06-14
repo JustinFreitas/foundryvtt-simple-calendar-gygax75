@@ -35,17 +35,13 @@ describe("Migration App Class Tests", () => {
     });
 
     test("Show App", () => {
-        //@ts-ignore
-        jest.spyOn(ma, "render").mockImplementation(() => {});
+        const renderSpy = jest.spyOn(ma, "render").mockImplementation(async () => ma);
         ma.showApp();
-        //@ts-ignore
-        expect(ma.render).toHaveBeenCalledTimes(1);
-        //@ts-ignore
-        expect(ma.render).toHaveBeenCalledWith({ force: true });
+        expect(renderSpy).toHaveBeenCalledTimes(1);
+        expect(renderSpy).toHaveBeenCalledWith({ force: true });
     });
 
     test("Prepare Context", async () => {
-        //@ts-ignore
         expect(await ma._prepareContext()).toBeDefined();
     });
 

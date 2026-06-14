@@ -156,7 +156,7 @@ export default class GameSettingsRegistration {
             hint: "",
             icon: "fa-solid fa-calendar",
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-ignore - MainAppConfigWrapper now extends the (untyped) ApplicationV2; the v9 League types still type registerMenu's `type` as FormApplication. Both are accepted by v14's registerMenu validator.
+            //@ts-ignore - registerMenu's `type` is typed as FormApplication by the v9 League types; v14 also accepts ApplicationV2 subclasses, which MainAppConfigWrapper now is.
             type: MainAppConfigWrapper
         });
         (<Game>game).settings.registerMenu(ModuleName, SettingNames.CalendarConfigurationMenu, {

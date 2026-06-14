@@ -6,16 +6,9 @@ import { CalManager, MainApplication, SC } from "../index";
 import { isObjectEmpty } from "../utilities/object";
 import { GetThemeName } from "../utilities/visual";
 
-// The v13+ ApplicationV2 framework lives under foundry.applications.api and is not present in the v9 League types.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 const ApplicationV2 = foundry.applications.api.ApplicationV2;
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 const HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 export default class MigrationApp extends HandlebarsApplicationMixin(ApplicationV2) {
     /**
      * The ID used for the application window within foundry
@@ -64,16 +57,12 @@ export default class MigrationApp extends HandlebarsApplicationMixin(Application
      * Shows the application window
      */
     public showApp() {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore - render is provided by ApplicationV2, which is untyped in the v9 League types.
         this.render({ force: true });
     }
 
     /**
      * Prepares the rendering context for the template (ApplicationV2 replacement for getData)
      */
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
     async _prepareContext(): Promise<object> {
         return {
             display: this.displayData,
@@ -85,14 +74,8 @@ export default class MigrationApp extends HandlebarsApplicationMixin(Application
     /**
      * Applies the current theme class after each render (ApplicationV2 replacement for per-render classes)
      */
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
     _onRender(context: object, options: object) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
         super._onRender(context, options);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
         this.element?.classList.add(GetThemeName());
     }
 
