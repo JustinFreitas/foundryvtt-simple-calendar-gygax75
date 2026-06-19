@@ -106,7 +106,7 @@ describe("Chat Timestamp Tests", () => {
 
         SC.globalConfiguration.inGameChatTimestamp = true;
         //@ts-ignore
-        await ChatTimestamp.renderTimestamp(cm, [tsc]);
+        await ChatTimestamp.renderTimestamp(cm, tsc);
         expect(cm.getFlag).toHaveBeenCalledTimes(1);
         expect(ts.style.display).toBe("none");
     });

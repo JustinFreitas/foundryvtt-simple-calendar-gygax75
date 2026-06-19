@@ -36,7 +36,8 @@ export default class NoteManager {
      * Registers the Simple Calendar note sheet with foundry
      */
     public registerNoteSheets() {
-        Journal.registerSheet(ModuleName, NoteSheet, { types: ["base"], makeDefault: false, label: "Simple Calendar: Note Sheet" });
+        //@ts-ignore - foundry.documents.collections.Journal is the v13+ namespaced replacement for the deprecated global Journal; not in the v9 League types.
+        foundry.documents.collections.Journal.registerSheet(ModuleName, NoteSheet, { types: ["base"], makeDefault: false, label: "Simple Calendar: Note Sheet" });
     }
 
     /**

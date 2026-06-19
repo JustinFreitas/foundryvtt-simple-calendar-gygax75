@@ -379,8 +379,10 @@ export default class MainApp extends FormApplication {
         }
 
         // Set the outer frame z-index
-        if (Object.keys(ui.windows).length === 0) _maxZ = 100 - 1;
-        this.position.zIndex = Math.min(++_maxZ, 9999);
+        //@ts-ignore - foundry.applications.api.ApplicationV2._maxZ is the v13+ namespaced replacement for the deprecated global _maxZ; not in the v9 League types.
+        if (Object.keys(ui.windows).length === 0) foundry.applications.api.ApplicationV2._maxZ = 100 - 1;
+        //@ts-ignore - see above; namespaced ApplicationV2._maxZ replaces the deprecated global _maxZ.
+        this.position.zIndex = Math.min(++foundry.applications.api.ApplicationV2._maxZ, 9999);
         html.css({ zIndex: this.position.zIndex });
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore

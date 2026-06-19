@@ -249,7 +249,7 @@ global.foundry.applications.ux.Draggable = global.foundry.applications.ux.Dragga
 global.foundry.documents = global.foundry.documents || {};
 //@ts-ignore
 global.foundry.documents.collections = global.foundry.documents.collections || {};
-//@ts-ignore
-global.foundry.documents.collections.Journal = global.Journal;
+// Note: foundry.documents.collections.Journal is wired in __mocks__/journal.ts,
+// which loads after this file (global.Journal is undefined at this point).
 //@ts-ignore
 global._maxZ = 100;
