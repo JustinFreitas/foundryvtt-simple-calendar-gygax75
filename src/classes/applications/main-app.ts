@@ -851,14 +851,17 @@ export default class MainApp extends FormApplication {
         event?.stopPropagation();
         const unitList = document.querySelector(`.fsc-main-wrapper .fsc-unit-list`);
         if (unitList) {
-            this.uiElementStates.dateTimeUnitOpen = animateElement(unitList, 500, forceHide);
-            this.updateApp();
-            if (this.uiElementStates.compactView) {
-                const rect = unitList.getBoundingClientRect();
-                if (rect.top < window.innerHeight / 2) {
-                    unitList.classList.add("fsc-down");
-                } else {
-                    unitList.classList.remove("fsc-down");
+            const openState = animateElement(unitList, 500, forceHide);
+            if (this.uiElementStates.dateTimeUnitOpen !== openState) {
+                this.uiElementStates.dateTimeUnitOpen = openState;
+                this.updateApp();
+                if (this.uiElementStates.compactView) {
+                    const rect = unitList.getBoundingClientRect();
+                    if (rect.top < window.innerHeight / 2) {
+                        unitList.classList.add("fsc-down");
+                    } else {
+                        unitList.classList.remove("fsc-down");
+                    }
                 }
             }
         }
