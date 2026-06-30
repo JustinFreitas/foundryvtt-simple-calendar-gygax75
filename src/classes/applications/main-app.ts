@@ -78,6 +78,10 @@ export default class MainApp extends FormApplication {
     };
 
     addonButtons: SimpleCalendar.AddonButton[] = [];
+
+    toggleUnitSelectorBind: ((event: Event) => void) | undefined;
+    keyClickBind: ((event: KeyboardEvent) => void) | undefined;
+
     /**
      * Simple Calendar constructor
      */
@@ -92,8 +96,13 @@ export default class MainApp extends FormApplication {
         //Check if the note list should always be shown
         this.uiElementStates["fsc-note-list"] = GameSettings.GetBooleanSettings(SettingNames.AlwaysShowNoteList);
 
-        document.addEventListener("keydown", this.keyClick.bind(this));
-        document.addEventListener("keyup", this.keyClick.bind(this));
+        if (!this.keyClickBind) {
+            this.keyClickBind = this.keyClick.bind(this);
+        }
+        document.removeEventListener("keydown", this.keyClickBind);
+        document.removeEventListener("keyup", this.keyClickBind);
+        document.addEventListener("keydown", this.keyClickBind);
+        document.addEventListener("keyup", this.keyClickBind);
     }
 
     /**
@@ -270,6 +279,10 @@ export default class MainApp extends FormApplication {
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
+        if (this.keyClickBind) {
+            document.removeEventListener("keydown", this.keyClickBind);
+            document.removeEventListener("keyup", this.keyClickBind);
+        }
         if (!SC.clientSettings.persistentOpen) {
             this.opening = true;
             return super.close(options);
@@ -611,7 +624,11 @@ export default class MainApp extends FormApplication {
         const appWindow = document.getElementById(MainApp.appWindowId);
         if (appWindow) {
             // Click anywhere in the app
-            appWindow.addEventListener("click", this.toggleUnitSelector.bind(this, true));
+            if (!this.toggleUnitSelectorBind) {
+                this.toggleUnitSelectorBind = this.toggleUnitSelector.bind(this, true);
+            }
+            appWindow.removeEventListener("click", this.toggleUnitSelectorBind);
+            appWindow.addEventListener("click", this.toggleUnitSelectorBind);
             if (this.uiElementStates.compactView) {
                 appWindow.classList.add("fsc-compact-view");
             } else {

@@ -43,6 +43,7 @@ export default class ConfigurationApp extends FormApplication {
      * @private
      */
     private appWindow: HTMLElement | null = null;
+    private toggleCalendarSelectorBind: ((event: Event) => void) | undefined;
     /**
      * A list of temporary calendars to be edited in the configuration dialog.
      * @private
@@ -205,12 +206,18 @@ export default class ConfigurationApp extends FormApplication {
      * @param options
      */
     close(options?: FormApplication.CloseOptions): Promise<void> {
+        if (this.appWindow && this.toggleCalendarSelectorBind) {
+            this.appWindow.removeEventListener("click", this.toggleCalendarSelectorBind);
+        }
         CalManager.clearClones();
         (this.activeCalendar).seasons.forEach((s) => {
             DateSelectorManager.RemoveSelector(`sc_season_start_date_${s.id}`);
             DateSelectorManager.RemoveSelector(`sc_season_sunrise_time_${s.id}`);
         });
-        DateSelectorManager.DeactivateSelector("quick-setup-predefined-calendar");
+        (this.activeCalendar).moons.forEach((m) => {
+            DateSelectorManager.RemoveSelector(`sc_first_new_moon_date_${m.id}`);
+        });
+        DateSelectorManager.RemoveSelector("quick-setup-predefined-calendar");
         this.appWindow = null;
         return super.close(options);
     }
@@ -423,7 +430,11 @@ export default class ConfigurationApp extends FormApplication {
             DateSelectorManager.ActivateSelector("quick-setup-predefined-calendar");
 
             // Click anywhere in the app
-            this.appWindow.addEventListener("click", this.toggleCalendarSelector.bind(this, true));
+            if (!this.toggleCalendarSelectorBind) {
+                this.toggleCalendarSelectorBind = this.toggleCalendarSelector.bind(this, true);
+            }
+            this.appWindow.removeEventListener("click", this.toggleCalendarSelectorBind);
+            this.appWindow.addEventListener("click", this.toggleCalendarSelectorBind);
             //---------------------
             // Calendar Picker / Add new calendar
             //---------------------

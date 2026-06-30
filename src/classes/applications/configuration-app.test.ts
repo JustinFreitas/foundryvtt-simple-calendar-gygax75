@@ -141,7 +141,7 @@ describe("Configuration App Class Tests", () => {
         jest.spyOn(DateSelectorManager, "RemoveSelector").mockImplementation(() => {});
         ca.close();
         expect(CalManager.clearClones).toHaveBeenCalledTimes(1);
-        expect(DateSelectorManager.RemoveSelector).toHaveBeenCalledTimes(8);
+        expect(DateSelectorManager.RemoveSelector).toHaveBeenCalledTimes(10);
         //@ts-ignore
         expect(ca.appWindow).toBeNull();
     });

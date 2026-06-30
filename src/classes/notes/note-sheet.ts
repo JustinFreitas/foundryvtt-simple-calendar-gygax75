@@ -234,7 +234,7 @@ export class NoteSheet extends JournalSheet {
             this.uiElementStates["fsc-page-list"] = false;
             this.uiElementStates.selectedPageIndex = 0;
             this.cleanUpProsemirror();
-            DateSelectorManager.DeactivateSelector(this.dateSelectorId);
+            DateSelectorManager.RemoveSelector(this.dateSelectorId);
             return super.close({ submit: false });
         }
     }
