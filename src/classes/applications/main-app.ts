@@ -178,10 +178,6 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
         }
 
         this.activateListeners();
-        Logger.info("MainApp._onRender completed. Waiting for layout pass to size window.");
-        requestAnimationFrame(() => {
-            MainApp.setWidthHeight(this);
-        });
     }
 
     protected _onPosition(position: any) {
@@ -333,7 +329,13 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 this.opening = false;
             }
 
-            super.render(renderOptions);
+            Logger.info("MainApp.render calling super.render");
+            super.render(renderOptions).then(() => {
+                Logger.info("MainApp.render promise resolved. Delaying setWidthHeight to next animation frame.");
+                requestAnimationFrame(() => {
+                    MainApp.setWidthHeight(this);
+                });
+            }).catch(Logger.error);
         }
         return this;
     }
