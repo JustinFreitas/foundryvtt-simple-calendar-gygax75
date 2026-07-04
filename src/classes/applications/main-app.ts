@@ -316,11 +316,11 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
      * @param parts
      */
     render(options?: boolean | any, parts?: any): any {
-        let renderOptions: any = {};
+        let renderOptions: any = { force: true };
         if (typeof options === "boolean") {
             renderOptions = { force: options };
         } else if (options) {
-            renderOptions = options;
+            renderOptions = { force: true, ...options };
         }
 
         if (canUser((<Game>game).user, SC.globalConfiguration.permissions.viewCalendar)) {

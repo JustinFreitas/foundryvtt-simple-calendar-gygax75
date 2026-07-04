@@ -247,7 +247,7 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
      * Shows the application window
      */
     public showApp() {
-        this.render(true);
+        this.render({ force: true });
     }
 
     /**
