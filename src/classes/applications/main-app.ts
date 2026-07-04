@@ -178,6 +178,7 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
         }
 
         this.activateListeners();
+        MainApp.setWidthHeight(this);
     }
 
     protected _onPosition(position: any) {
@@ -485,7 +486,7 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
     public static setWidthHeight(ma: MainApp) {
         let width = 0,
             height = 0;
-        const main = <HTMLElement>document.querySelector(`#${MainApp.appWindowId}`);
+        const main = ma.element;
         if (main) {
             const header = <HTMLElement>main.querySelector(".window-header");
             if (header) {
