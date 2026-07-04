@@ -44,7 +44,7 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
 
     static DEFAULT_OPTIONS = {
         id: "fsc-simple-calendar-configuration-application-form",
-        classes: ["simple-calendar", "fsc-simple-calendar-configuration"],
+        classes: ["simple-calendar", "fsc-simple-calendar-configuration", "window-app"],
         window: {
             title: "FSC.Configuration.Title",
             resizable: true

@@ -35,7 +35,7 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     static DEFAULT_OPTIONS = {
         id: "fsc-simple-calendar-application",
-        classes: ["simple-calendar"],
+        classes: ["simple-calendar", "window-app"],
         window: {
             title: "FSC.Title",
             resizable: false
