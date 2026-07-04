@@ -194,7 +194,7 @@
             p{
               font-size: pxToRem(14);
             }
-            input:not(.fsc-toggle), select{
+            input:not(.fsc-toggle):not([type="file"]), select{
               height: pxToRem(26);
             }
 
@@ -337,6 +337,10 @@
             .fsc-import-export{
               .fsc-importing{
                 flex-direction: column;
+                input[type="file"]{
+                  height: pxToRem(36);
+                  padding: $spacer-quarter;
+                }
                 .fsc-progress{
                   margin-top: $spacer-half;
                   border: 1px solid var(--progress-bar-border-color);
