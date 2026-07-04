@@ -179,7 +179,7 @@
             flex: 1;
             overflow-x: hidden;
             overflow-y: auto;
-            padding: $spacer-half $spacer-half pxToRem(30);
+            padding: $spacer-half $spacer-half pxToRem(60);
 
             h2{
               border-color: var(--heading-border-color);
@@ -280,13 +280,14 @@
                 }
                 .fsc-options{
                   flex: 0 0 100%;
-                  padding: $spacer-quarter 2rem;
+                  padding: 0 2rem;
                   max-height: 0;
                   overflow: hidden;
 
                   &.fsc-open{
                     visibility: visible;
                     max-height: pxToRem(500);
+                    padding: $spacer-quarter 2rem;
                   }
                   &.fsc-closed{
                     visibility: hidden;
@@ -554,19 +555,20 @@
           }
           .fsc-config-save{
             position: absolute;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             backdrop-filter: blur(2px);
             left: 0;
             bottom: 0;
-            height: pxToRem(30);
+            height: pxToRem(45);
             border-top: 1px solid #b5b5b5;
 
             button{
-              display: inline-block;
               width: 30%;
-              margin-left: $spacer;
-              margin-top: $spacer-quarter;
+              height: pxToRem(30);
+              margin: 0;
             }
           }
         }
