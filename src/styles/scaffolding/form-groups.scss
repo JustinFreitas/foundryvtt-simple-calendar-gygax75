@@ -71,6 +71,13 @@
               background-color: var(--form-group-input-bg-color);
               color: var(--form-group-input-color);
             }
+            input[type="checkbox"]:not(.fsc-toggle), input[type="radio"] {
+              width: auto !important;
+              height: auto !important;
+              border: unset !important;
+              background-color: unset !important;
+              box-shadow: unset !important;
+            }
             .notes{
               color: var(--form-group-help-color);
               font-family: var(--font-family) !important;
