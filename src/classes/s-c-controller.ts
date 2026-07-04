@@ -356,10 +356,12 @@ export default class SCController {
     /**
      * Checks settings to see if the note directory should be shown or hidden from the journal directory
      */
-    public async renderJournalDirectory(tab: JournalDirectory, htmlElement: HTMLElement) {
+    public async renderJournalDirectory(tab: JournalDirectory, htmlElement: any) {
+        const html = htmlElement instanceof HTMLElement ? htmlElement : htmlElement[0];
+        if (!html) return;
         await NManager.createJournalDirectory();
         if (!this.globalConfiguration.showNotesFolder && NManager.noteDirectory) {
-            const folder = htmlElement.querySelector(`.folder[data-folder-id='${NManager.noteDirectory.id}']`);
+            const folder = html.querySelector(`.folder[data-folder-id='${NManager.noteDirectory.id}']`);
             if (folder) {
                 folder.remove();
             }
@@ -369,9 +371,11 @@ export default class SCController {
     /**
      * Checks settings to see if the note directory should be shown or hidden from the journal sheet directory dropdown
      */
-    public renderJournalSheet(sheet: JournalSheet, htmlElement: HTMLElement) {
+    public renderJournalSheet(sheet: JournalSheet, htmlElement: any) {
+        const html = htmlElement instanceof HTMLElement ? htmlElement : htmlElement[0];
+        if (!html) return;
         if (!this.globalConfiguration.showNotesFolder && NManager.noteDirectory) {
-            const option = htmlElement.querySelector(`option[value='${NManager.noteDirectory.id}']`);
+            const option = html.querySelector(`option[value='${NManager.noteDirectory.id}']`);
             if (option) {
                 option.remove();
             }
