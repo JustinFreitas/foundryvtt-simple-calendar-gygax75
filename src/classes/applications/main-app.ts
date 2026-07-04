@@ -331,10 +331,14 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
             Logger.info("MainApp.render calling super.render");
             super.render(renderOptions).then(() => {
-                Logger.info("MainApp.render promise resolved. Delaying setWidthHeight to next animation frame.");
-                requestAnimationFrame(() => {
-                    MainApp.setWidthHeight(this);
-                });
+                Logger.info("MainApp.render promise resolved. Scheduling setWidthHeight with setTimeout.");
+                setTimeout(() => {
+                    try {
+                        MainApp.setWidthHeight(this);
+                    } catch (e: any) {
+                        Logger.error(e);
+                    }
+                }, 50);
             }).catch(Logger.error);
         }
         return this;
