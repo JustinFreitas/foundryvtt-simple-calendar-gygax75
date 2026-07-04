@@ -178,7 +178,10 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
         }
 
         this.activateListeners();
-        MainApp.setWidthHeight(this);
+        Logger.info("MainApp._onRender completed. Waiting for layout pass to size window.");
+        requestAnimationFrame(() => {
+            MainApp.setWidthHeight(this);
+        });
     }
 
     protected _onPosition(position: any) {
@@ -602,6 +605,7 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
             }
             //Foundry does weird things if you pass in a height with a top, so we have to do these changes in a specific order
             //depending on which view we are entering.
+            Logger.info(`MainApp.setWidthHeight computed width: ${width}, height: ${height}`);
             if (ma.uiElementStates.compactView) {
                 ma.setPosition({ height: height, width: width });
                 if (GameSettings.GetBooleanSettings(SettingNames.RememberCompactPosition)) {
