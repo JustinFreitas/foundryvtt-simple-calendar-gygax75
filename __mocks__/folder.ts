@@ -1,4 +1,4 @@
 //@ts-ignore
-global.Folder = {
+global.Folder = <any>{
     create: async () => {return true;}
 };

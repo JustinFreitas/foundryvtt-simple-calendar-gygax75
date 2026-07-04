@@ -17,7 +17,6 @@ import MainApp from "./applications/main-app";
 import UserPermissions from "./configuration/user-permissions";
 import { canUser } from "./utilities/permissions";
 import GameSockets from "./foundry-interfacing/game-sockets";
-import { RoundData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/documents/combat";
 import MultiSelect from "./renderer/multi-select";
 import { GetThemeName } from "./utilities/visual";
 import { FoundryVTTGameData } from "./foundry-interfacing/game-data";

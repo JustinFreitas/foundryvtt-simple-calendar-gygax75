@@ -61,7 +61,7 @@ describe("Primary Socket Tests", () => {
         //@ts-ignore
         game.user.isGM = true;
         const users = (<Game>game).users;
-        (<Game>game).users = undefined;
+        (<Game>game).users = undefined as any;
 
         r = await s.initialize();
         expect(r).toBe(true);

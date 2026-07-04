@@ -1,5 +1,5 @@
 // @ts-ignore
-global.CONST = {
+global.CONST = <any>{
     KEYBINDING_PRECEDENCE: {
         NORMAL: 1
     }

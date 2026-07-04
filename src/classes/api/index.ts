@@ -164,7 +164,7 @@ export async function addNote(
                     return (perms[o] = (<Game>game).user?.id === o ? 3 : 2);
                 });
             }
-            await je.update({ ownership: perms }, { render: false, renderSheet: false });
+            await je.update({ ownership: perms }, <any>{ render: false, renderSheet: false });
         }
         return je;
     }

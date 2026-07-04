@@ -433,7 +433,7 @@ export default class NoteManager {
                             let content = pages[p].name || "";
                             if (pages[p].type === "text") {
                                 const tmp = document.createElement("DIV");
-                                tmp.innerHTML = pages[p].text.content;
+                                tmp.innerHTML = pages[p].text.content || "";
                                 content += ` ${(tmp.textContent || tmp.innerText || "").replace(/\r?\n|\r/g, " ")}`;
                             }
                             docCont.push(content);

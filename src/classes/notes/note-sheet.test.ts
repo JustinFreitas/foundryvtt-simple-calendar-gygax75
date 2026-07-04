@@ -208,7 +208,7 @@ describe("Note Sheet Class Tests", () => {
             .mockReturnValue({ title: "Journal", noteData: nd, ownership: je.ownership });
         //@ts-ignore
         ns.editMode = true;
-        jest.spyOn(ns, "isEditable", "get").mockReturnValue(true);
+        (<any>jest.spyOn)(ns, "isEditable", "get").mockReturnValue(true);
         //@ts-ignore
         jest.spyOn(game.user, "id", "get")
             .mockReturnValueOnce("asd")

@@ -71,7 +71,7 @@ export class GameSettings {
      * @param {SettingNames} setting The name of the setting to get
      */
     static GetBooleanSettings(setting: SettingNames): boolean {
-        return <boolean>(<Game>game).settings.get(ModuleName, setting);
+        return (<Game>game).settings.get(ModuleName, setting) as any;
     }
 
     /**
@@ -79,7 +79,7 @@ export class GameSettings {
      * @param {SettingNames} setting The name of the setting to get
      */
     static GetObjectSettings(setting: SettingNames): object {
-        return <object>(<Game>game).settings.get(ModuleName, setting);
+        return (<Game>game).settings.get(ModuleName, setting) as any;
     }
 
     /**
@@ -87,7 +87,7 @@ export class GameSettings {
      * @param {SettingNames} setting The name of the setting to get
      */
     static GetStringSettings(setting: SettingNames | string): string {
-        return <string>(<Game>game).settings.get(ModuleName, setting);
+        return (<Game>game).settings.get(ModuleName, setting) as any;
     }
 
     /**
@@ -95,7 +95,7 @@ export class GameSettings {
      * @param {SettingNames} setting The name of the setting to get
      */
     static GetNumericSettings(setting: SettingNames | string): number {
-        return <number>(<Game>game).settings.get(ModuleName, setting);
+        return (<Game>game).settings.get(ModuleName, setting) as any;
     }
 
     static async SaveBooleanSetting(setting: SettingNames, data: boolean, checkIfGM: boolean = true): Promise<boolean> {

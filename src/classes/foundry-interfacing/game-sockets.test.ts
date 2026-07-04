@@ -11,7 +11,7 @@ describe('Game Sockets Class Tests', () => {
     test('on', () => {
         const test = jest.fn<()=>{}>();
         const orig = (<Game>game).socket;
-        (<Game>game).socket = null;
+        (<any>game).socket = null;
         GameSockets.on(test);
 
         (<Game>game).socket = orig;
@@ -21,7 +21,7 @@ describe('Game Sockets Class Tests', () => {
 
     test('emit', async() => {
         const orig = (<Game>game).socket;
-        (<Game>game).socket = null;
+        (<any>game).socket = null;
 
         let r = await GameSockets.emit({type: SocketTypes.clock, data: {}});
         expect(r).toBe(false);

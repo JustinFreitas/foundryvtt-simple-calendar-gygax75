@@ -337,8 +337,8 @@ export default class MainApp extends FormApplication {
         windowData: { id: string; classes: string; appId: number; title: string; headerButtons: Application.HeaderButton[] }
     ) {
         // FoundryUpdate: This is ripped from foundry's code and will need to be updated if foundry changes it. This is a nested function from _renderOuter not its own function
-        html[0].querySelectorAll(".header-button").forEach((b) => {
-            b.addEventListener("click", (event) => {
+        html[0].querySelectorAll(".header-button").forEach((b: any) => {
+            b.addEventListener("click", (event: any) => {
                 event.preventDefault();
                 const currentTarget = <HTMLElement>event.currentTarget;
                 if (currentTarget) {

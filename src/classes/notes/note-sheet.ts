@@ -6,7 +6,6 @@ import { CalManager, MainApplication, NManager, SC } from "../index";
 import { animateElement, ConvertPxBasedOnRemSize, GetThemeName } from "../utilities/visual";
 import { getCheckBoxInputValue, getNumericInputValue, getTextInputValue } from "../utilities/inputs";
 import GameSockets from "../foundry-interfacing/game-sockets";
-import { ConcreteJournalEntry } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/apps/forms/journal-sheet";
 import MultiSelect from "../renderer/multi-select";
 import { foundryMergeObject } from "../foundry-interfacing/utilities";
 
@@ -1051,7 +1050,7 @@ export class NoteSheet extends JournalSheet {
         e.preventDefault();
         await this.writeInputValuesToObjects();
         (<SimpleCalendar.NoteData>this.journalData.flags[ModuleName].noteData).fromPredefined = false;
-        await this.noteJournal.update(this.journalData, { render: false, renderSheet: false });
+        await this.noteJournal.update(this.journalData, <any>{ render: false, renderSheet: false });
 
         //Get all pages currently saved in the journal entry
         const pages = this.noteJournal.getEmbeddedCollection("JournalEntryPage").contents;
@@ -1062,13 +1061,13 @@ export class NoteSheet extends JournalSheet {
                 return jp._id === pages[i].id;
             });
             if (index === -1) {
-                await pages[i].delete({ render: false, renderSheet: false });
+                await pages[i].delete(<any>{ render: false, renderSheet: false });
             }
         }
 
         //Add and update any pages that remain in our journal page list
         for (let i = 0; i < this.journalPages.length; i++) {
-            const p = pages.find((p) => {
+            const p = pages.find((p: any) => {
                 return p.id === this.journalPages[i]._id;
             });
             if (p) {
@@ -1085,7 +1084,7 @@ export class NoteSheet extends JournalSheet {
                             video: this.journalPages[i].video
                         }
                     ],
-                    { render: false, renderSheet: false }
+                    <any>{ render: false, renderSheet: false }
                 );
             } else {
                 await this.noteJournal.createEmbeddedDocuments(
@@ -1108,7 +1107,7 @@ export class NoteSheet extends JournalSheet {
                             }
                         }
                     ],
-                    { render: false, renderSheet: false }
+                    <any>{ render: false, renderSheet: false }
                 );
             }
         }

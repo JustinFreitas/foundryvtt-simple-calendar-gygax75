@@ -59,10 +59,9 @@ describe("Calendar Class Tests", () => {
         expect(c.loadFromSettings).toHaveBeenCalledTimes(1);
 
         const orig = (<Game>game).system;
-        //@ts-ignore
-        (<Game>game).system = null;
+        (<any>game).system = null;
         c = new Calendar("a", "cal");
-        (<Game>game).system = orig;
+        (<any>game).system = orig;
     });
 
     test("Clone", () => {

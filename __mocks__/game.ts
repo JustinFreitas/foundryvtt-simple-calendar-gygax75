@@ -26,7 +26,7 @@ const user: User = {
     id: "",
     active: true,
     viewedScene: "",
-    avatar: "",
+    avatar: null,
     //character: {},
     // @ts-ignore
     permissions: [],
@@ -201,10 +201,10 @@ const game = {
 };
 
 // @ts-ignore
-global.game = game;
+global.game = <any>game;
 
 // @ts-ignore
-global.ui = {
+global.ui = <any>{
     chat: {
         _lastId: "",
         _state: 0,

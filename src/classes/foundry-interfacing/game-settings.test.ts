@@ -155,10 +155,10 @@ describe('Game Settings Class Tests', () => {
 
         jest.spyOn(console, 'error').mockImplementation(()=>{});
         const origUi = ui.notifications;
-        ui.notifications = undefined;
+        (<any>ui).notifications = undefined;
         GameSettings.UiNotification('');
         expect(console.error).toHaveBeenCalled();
-        ui.notifications = origUi;
+        (<any>ui).notifications = origUi;
     });
 
     test('Get Scene For Combat Check', () => {

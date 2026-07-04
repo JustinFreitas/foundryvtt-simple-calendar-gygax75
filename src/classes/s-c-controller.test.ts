@@ -405,7 +405,7 @@ describe("SCController Tests", () => {
         jest.spyOn(CalManager, "getActiveCalendar").mockReturnValue(tCal);
         const orig = (<Game>game).combats;
         const origScenes = (<Game>game).scenes;
-        (<Game>game).combats = undefined;
+        (<any>game).combats = undefined;
         //@ts-ignore
         SC.createCombatant({}, {}, "");
         expect(tCal.time.combatRunning).toBe(false);

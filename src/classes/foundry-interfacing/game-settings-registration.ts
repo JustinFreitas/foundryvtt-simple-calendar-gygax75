@@ -164,7 +164,8 @@ export default class GameSettingsRegistration {
             label: "FSC.Configuration.Title",
             hint: "",
             icon: "fa-solid fa-cog",
-            type: ConfigurationApp
+            type: ConfigurationApp as any,
+            restricted: true
         });
         // -------------------
         // Core Settings
@@ -175,7 +176,7 @@ export default class GameSettingsRegistration {
             config: false,
             type: Array,
             default: [],
-            onChange: CalManager.loadCalendars.bind(CalManager)
+            onChange: () => { CalManager.loadCalendars(); }
         });
         (<Game>game).settings.register(ModuleName, SettingNames.ActiveCalendar, {
             name: "Active Calendar",
@@ -183,7 +184,7 @@ export default class GameSettingsRegistration {
             config: false,
             type: String,
             default: "default",
-            onChange: CalManager.loadActiveCalendar.bind(CalManager)
+            onChange: () => { CalManager.loadActiveCalendar(); }
         });
         (<Game>game).settings.register(ModuleName, SettingNames.GlobalConfiguration, {
             name: "Global Configuration",

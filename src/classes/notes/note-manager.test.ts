@@ -394,7 +394,7 @@ describe("Note Manager Class Tests", () => {
                 fullDisplayDate: "",
                 //@ts-ignore
                 categories: [{ name: "c1" }],
-                pages: [{ name: "", type: "text", text: { content: "" } }]
+                pages: [<any>{ name: "", type: "text", text: { content: "" } }]
             }
         ];
 
