@@ -22,7 +22,7 @@
             justify-content: flex-start;
             overflow-y: auto;
             overflow-x: visible;
-            padding-bottom: pxToRem(30);
+            margin-bottom: pxToRem(45);
             border:0;
             border-right: 1px solid;
 
@@ -179,7 +179,8 @@
             flex: 1;
             overflow-x: hidden;
             overflow-y: auto;
-            padding: $spacer-half $spacer-half pxToRem(60);
+            margin-bottom: pxToRem(45);
+            padding: $spacer-half;
 
             h2{
               border-color: var(--heading-border-color);
