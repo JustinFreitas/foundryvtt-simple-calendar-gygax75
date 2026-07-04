@@ -329,9 +329,7 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 this.opening = false;
             }
 
-            Logger.info("MainApp.render calling super.render");
             super.render(renderOptions).then(() => {
-                Logger.info("MainApp.render promise resolved. Scheduling setWidthHeight with setTimeout.");
                 setTimeout(() => {
                     try {
                         MainApp.setWidthHeight(this);
@@ -494,7 +492,6 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
      */
     public static setWidthHeight(ma: MainApp) {
         const main = document.getElementById(MainApp.appWindowId) || ma.element;
-        Logger.info("MainApp.setWidthHeight entry, main element found: " + !!main);
         let width = 0,
             height = 0;
         if (main) {
@@ -620,7 +617,6 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
             }
             //Foundry does weird things if you pass in a height with a top, so we have to do these changes in a specific order
             //depending on which view we are entering.
-            Logger.info(`MainApp.setWidthHeight computed width: ${width}, height: ${height}`);
             if (ma.uiElementStates.compactView) {
                 ma.setPosition({ height: height, width: width });
                 if (GameSettings.GetBooleanSettings(SettingNames.RememberCompactPosition)) {
