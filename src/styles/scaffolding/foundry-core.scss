@@ -10,8 +10,7 @@
       }
     }
 
-    //Inputs
-    input, select, option{
+    input:not([type="checkbox"]):not([type="radio"]), select, option{
       background-color: var(--input-bg-color) !important;
       border-color: var(--input-border-color) !important;
       color: var(--input-color) !important;
