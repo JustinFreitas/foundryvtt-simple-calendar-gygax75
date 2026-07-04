@@ -240,6 +240,17 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
 
         this.element?.classList.add(GetThemeName());
 
+        // Bind the tabs controller
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        const tabConfig = this.options.tabs ? this.options.tabs[0] : null;
+        if (tabConfig && this.element) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            const tabs = new foundry.applications.ux.Tabs(tabConfig);
+            tabs.bind(this.element);
+        }
+
         this.activateListeners($(this.element));
     }
 

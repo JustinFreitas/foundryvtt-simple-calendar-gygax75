@@ -69,6 +69,12 @@ class DocumentSheetConfig {
     static registerSheet = jest.fn();
 }
 
+class Tabs {
+    constructor(config: any = {}) {}
+    bind(html: any) {}
+    activate(tabName: string, options: any = {}) {}
+}
+
 // @ts-ignore
 global.foundry = global.foundry || {};
 // @ts-ignore
@@ -78,6 +84,8 @@ global.foundry.applications.api = global.foundry.applications.api || {};
 // @ts-ignore
 global.foundry.applications.apps = global.foundry.applications.apps || {};
 // @ts-ignore
+global.foundry.applications.ux = global.foundry.applications.ux || {};
+// @ts-ignore
 global.foundry.applications.api.ApplicationV2 = ApplicationV2;
 // @ts-ignore
 global.foundry.applications.api.DocumentSheetV2 = DocumentSheetV2;
@@ -85,5 +93,7 @@ global.foundry.applications.api.DocumentSheetV2 = DocumentSheetV2;
 global.foundry.applications.api.HandlebarsApplicationMixin = HandlebarsApplicationMixin;
 // @ts-ignore
 global.foundry.applications.apps.DocumentSheetConfig = DocumentSheetConfig;
+// @ts-ignore
+global.foundry.applications.ux.Tabs = Tabs;
 
-export { ApplicationV2, DocumentSheetV2, HandlebarsApplicationMixin, DocumentSheetConfig };
+export { ApplicationV2, DocumentSheetV2, HandlebarsApplicationMixin, DocumentSheetConfig, Tabs };
