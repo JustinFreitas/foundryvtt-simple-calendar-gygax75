@@ -48,12 +48,25 @@ class ApplicationV2 {
     _onRender(_context?: any, _options?: any) {}
 }
 
+class DocumentSheetV2 extends ApplicationV2 {
+    get document() {
+        return this.options.document;
+    }
+    get isEditable() {
+        return true;
+    }
+}
+
 // HandlebarsApplicationMixin just returns a subclass that also carries a static PARTS bag.
 // @ts-ignore
 function HandlebarsApplicationMixin(Base: any) {
     return class extends Base {
         static PARTS: any = {};
     };
+}
+
+class DocumentSheetConfig {
+    static registerSheet = jest.fn();
 }
 
 // @ts-ignore
@@ -63,8 +76,14 @@ global.foundry.applications = global.foundry.applications || {};
 // @ts-ignore
 global.foundry.applications.api = global.foundry.applications.api || {};
 // @ts-ignore
+global.foundry.applications.apps = global.foundry.applications.apps || {};
+// @ts-ignore
 global.foundry.applications.api.ApplicationV2 = ApplicationV2;
 // @ts-ignore
+global.foundry.applications.api.DocumentSheetV2 = DocumentSheetV2;
+// @ts-ignore
 global.foundry.applications.api.HandlebarsApplicationMixin = HandlebarsApplicationMixin;
+// @ts-ignore
+global.foundry.applications.apps.DocumentSheetConfig = DocumentSheetConfig;
 
-export { ApplicationV2, HandlebarsApplicationMixin };
+export { ApplicationV2, DocumentSheetV2, HandlebarsApplicationMixin, DocumentSheetConfig };

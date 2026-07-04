@@ -8,8 +8,12 @@ import { getCheckBoxInputValue, getNumericInputValue, getTextInputValue } from "
 import GameSockets from "../foundry-interfacing/game-sockets";
 import MultiSelect from "../renderer/multi-select";
 import { foundryMergeObject } from "../foundry-interfacing/utilities";
+const DocumentSheetV2 = foundry.applications.api.DocumentSheetV2;
+const HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
 
-export class NoteSheet extends JournalSheet {
+export class NoteSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
+    public editors: Record<string, any> = {};
+
     private dirty: boolean = false;
 
     private resized: boolean = false;
@@ -49,7 +53,12 @@ export class NoteSheet extends JournalSheet {
 
     public static SetHeight(ns: NoteSheet) {
         if (ns.appWindow && ns.appWindow instanceof Element) {
-            const pseudoAfter = window.getComputedStyle(ns.appWindow, ":after");
+            let pseudoAfter: CSSStyleDeclaration | { height: string } = { height: "0px" };
+            try {
+                pseudoAfter = window.getComputedStyle(ns.appWindow, ":after");
+            } catch (e) {
+                // JSDOM does not support pseudo-elements in getComputedStyle
+            }
             if (!ns.resized) {
                 const form = ns.appWindow.getElementsByTagName("form");
                 if (form && form.length) {
@@ -116,37 +125,70 @@ export class NoteSheet extends JournalSheet {
         }
     }
 
-    constructor(object: ConcreteJournalEntry, options = {}) {
-        super(object, options);
+    constructor(object: any, options: any = {}) {
+        if (object && !object.document) {
+            options.document = object;
+            super(options);
+        } else {
+            super(object);
+        }
         this.dateSelectorId = `scNoteDate_${this.noteJournal.id}`;
         this.categoryMultiSelectId = `scNoteCategories_${this.noteJournal.id}`;
         this.playerMultiSelectId = `scUserPermissions_${this.noteJournal.id}`;
         this.copyData();
     }
 
-    /**
-     * The JournalEntry document this sheet is editing.
-     *
-     * The v1 JournalSheet framework exposes it as `this.object`; the v2 DocumentSheetV2 exposes it as
-     * `this.document`. Routing all access through this typed accessor means the eventual v2 port only has
-     * to change the accessor body, not the ~48 call sites.
-     */
     private get noteJournal(): JournalEntry {
-        return <JournalEntry>this.object;
+        return <JournalEntry>this.document;
     }
 
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "modules/foundryvtt-simple-calendar/templates/note-sheet.html";
-        options.title = "Simple Calendar Note";
-        options.id = this.appWindowId;
-        options.classes = ["sheet", "journal-sheet", "simple-calendar"];
-        options.resizable = true;
-        options.closeOnSubmit = false;
-        if ((<Game>game).settings) {
-            options.classes.push(GetThemeName());
+    get object() {
+        return this.document;
+    }
+
+    static DEFAULT_OPTIONS = {
+        id: "fsc-simple-calendar-note-journal-form",
+        classes: ["sheet", "journal-sheet", "simple-calendar"],
+        tag: "form",
+        window: {
+            title: "Simple Calendar Note",
+            resizable: true
+        },
+        position: {
+            width: 720,
+            height: "auto"
+        },
+        form: {
+            closeOnSubmit: false,
+            submitOnChange: false
         }
-        return options;
+    };
+
+    static PARTS = {
+        body: {
+            template: "modules/foundryvtt-simple-calendar/templates/note-sheet.html"
+        }
+    };
+
+    static get defaultOptions() {
+        return this.DEFAULT_OPTIONS;
+    }
+
+    async _prepareContext(options?: any): Promise<object> {
+        return await this.getData();
+    }
+
+    protected _onRender(context: object, options: any) {
+        super._onRender(context, options);
+        
+        this.element?.classList.forEach((cls: string) => {
+            if (cls === "classic" || cls === "dark" || cls === "foundry" || cls === "clean" || cls === "solstice" || cls === "storm" || cls === "winter") {
+                this.element?.classList.remove(cls);
+            }
+        });
+        this.element?.classList.add(GetThemeName());
+
+        this.activateListeners();
     }
 
     static get defaultObject() {
@@ -201,7 +243,7 @@ export class NoteSheet extends JournalSheet {
         }
     }
 
-    override get title(): string {
+    get title(): string {
         return this.noteJournal.name || "Note";
     }
 
@@ -239,11 +281,57 @@ export class NoteSheet extends JournalSheet {
     }
 
     cleanUpProsemirror() {
-        Object.values(this.editors).forEach((ed) => {
+        if (this.editors) {
+            Object.values(this.editors).forEach((ed) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
+                if (ed && ed.instance) ed.instance.destroy();
+            });
+        }
+    }
+
+    _getHeaderButtons() {
+        return [{ label: "Close", class: "close", icon: "fas fa-times", onclick: () => this.close() }];
+    }
+
+    async saveEditor(name: string, { preventRender = false } = {}) {
+        const editor = this.editors[name];
+        if (editor && editor.instance) {
+            const content = editor.instance.getContent ? editor.instance.getContent() : (editor.instance.getData ? editor.instance.getData() : "");
+            if (name === "content" && this.journalPages[this.uiElementStates.selectedPageIndex]) {
+                this.journalPages[this.uiElementStates.selectedPageIndex].text = { content };
+                this.dirty = true;
+            }
+        }
+    }
+
+    async _activateEditor(div: HTMLElement) {
+        const name = div.getAttribute("data-edit");
+        if (!name) return;
+        const options = {
+            target: div,
+            fieldName: name,
+            saveStyle: "manual",
+            document: this.noteJournal,
+            collaborate: false,
+            content: (<any>this.noteJournal).content || ""
+        };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        if (typeof TextEditor !== "undefined") {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
-            if (ed.instance) ed.instance.destroy();
-        });
+            const editor = await TextEditor.create(options.document ? { engine: "prosemirror", ...options } : options);
+            this.editors[name] = {
+                instance: editor,
+                target: div
+            };
+        } else {
+            this.editors[name] = {
+                instance: null,
+                target: div
+            };
+        }
     }
 
     async isDirtyDialogClose(save: boolean) {
@@ -256,16 +344,24 @@ export class NoteSheet extends JournalSheet {
         return this.close();
     }
 
-    render(force?: boolean, options?: Application.RenderOptions<DocumentSheetOptions>, startInEditMode?: boolean): this {
+    render(force?: any, options?: any, startInEditMode?: boolean): this {
         if (startInEditMode !== undefined) {
             this.editMode = startInEditMode;
         }
-        return super.render(force, options);
+        if (typeof force === "boolean") {
+            super.render({ force, ...options });
+        } else if (force && typeof force === "object") {
+            super.render(force);
+        } else {
+            super.render();
+        }
+        return this;
     }
 
-    async getData(): Promise<JournalSheet.Data> {
+    async getData(options?: any): Promise<any> {
+        const baseContext = typeof super._prepareContext === "function" ? await super._prepareContext(options) : {};
         const newOptions = {
-            ...super.getData(),
+            ...baseContext,
             pages: this.journalPages,
             editMode: this.editMode,
             uiElementStates: this.uiElementStates,
@@ -490,7 +586,7 @@ export class NoteSheet extends JournalSheet {
     }
 
     activateListeners() {
-        this.appWindow = document.getElementById(`${this.id}`);
+        this.appWindow = this.element;
         if (this.appWindow) {
             const themes = Themes.map((t) => {
                 return t.key;
@@ -564,7 +660,7 @@ export class NoteSheet extends JournalSheet {
         }
     }
 
-    protected override _updateObject(event: Event, formData: JournalSheet.FormData): Promise<unknown> {
+    protected _updateObject(event: Event, formData: JournalSheet.FormData): Promise<unknown> {
         if (this.journalPages[this.uiElementStates.selectedPageIndex].type === "text") {
             this.journalPages[this.uiElementStates.selectedPageIndex].text = { content: formData.content };
             this.dirty = true;
@@ -636,9 +732,13 @@ export class NoteSheet extends JournalSheet {
         }
     }
 
-    protected _onResize(event: Event) {
+    protected _onPosition(position: any) {
+        super._onPosition(position);
+        this._onResize();
+    }
+
+    _onResize(event?: Event) {
         this.resized = true;
-        super._onResize(event);
     }
 
     private generateImageHTML(src?: string) {

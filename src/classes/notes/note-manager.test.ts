@@ -44,7 +44,8 @@ describe("Note Manager Class Tests", () => {
 
     test("Register Note Sheets", () => {
         NManager.registerNoteSheets();
-        expect(Journal.registerSheet).toHaveBeenCalledTimes(1);
+        //@ts-ignore
+        expect(foundry.applications.apps.DocumentSheetConfig.registerSheet).toHaveBeenCalledTimes(1);
     });
 
     test("Create Journal Directory", async () => {
