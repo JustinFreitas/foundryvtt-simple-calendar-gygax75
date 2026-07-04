@@ -587,6 +587,14 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 }
             }
 
+            if (ma.uiElementStates.compactView) {
+                if (width < 225) width = 225;
+                if (height < 120) height = 120;
+            } else {
+                if (width < 320) width = 320;
+                if (height < 450) height = 450;
+            }
+
             const options: Partial<Application.Position> = {};
             if (ma.uiElementStates.compactView && GameSettings.GetBooleanSettings(SettingNames.RememberCompactPosition)) {
                 const pos = <SimpleCalendar.AppPosition>GameSettings.GetObjectSettings(SettingNames.AppCompactPosition);

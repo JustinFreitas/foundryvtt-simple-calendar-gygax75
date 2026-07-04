@@ -326,15 +326,29 @@ export default class SCController {
      */
     public getSceneControlButtons(controls: any) {
         if (canUser((<Game>game).user, this.globalConfiguration.permissions.viewCalendar)) {
-            const tokenControls = controls.notes;
-            if (tokenControls && Object.prototype.hasOwnProperty.call(tokenControls, "tools")) {
-                tokenControls.tools.calendar = {
-                    name: "calendar",
-                    title: "FSC.Title",
-                    icon: "fa-solid fa-calendar simple-calendar-icon",
-                    button: true,
-                    onClick: MainApplication.sceneControlButtonClick.bind(MainApplication)
-                };
+            let notesGroup = controls.notes;
+            if (!notesGroup && Array.isArray(controls)) {
+                notesGroup = controls.find((c: any) => c.name === "notes");
+            }
+            if (notesGroup && notesGroup.tools) {
+                if (Array.isArray(notesGroup.tools)) {
+                    notesGroup.tools.push({
+                        name: "calendar",
+                        title: "FSC.Title",
+                        icon: "fa-solid fa-calendar simple-calendar-icon",
+                        button: true,
+                        visible: true,
+                        onClick: MainApplication.sceneControlButtonClick.bind(MainApplication)
+                    });
+                } else {
+                    notesGroup.tools.calendar = {
+                        name: "calendar",
+                        title: "FSC.Title",
+                        icon: "fa-solid fa-calendar simple-calendar-icon",
+                        button: true,
+                        onClick: MainApplication.sceneControlButtonClick.bind(MainApplication)
+                    };
+                }
             }
         }
     }
