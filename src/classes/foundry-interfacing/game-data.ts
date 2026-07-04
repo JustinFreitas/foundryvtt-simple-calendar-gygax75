@@ -22,6 +22,6 @@ export class FoundryVTTGameData {
     public static get systemVersion(): string {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        return (<Game>game).system.version || (<Game>game).system.data.version;
+        return (<Game>game).system.version || (<Game>game).system.data?.version;
     }
 }
