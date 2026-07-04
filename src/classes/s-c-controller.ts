@@ -338,7 +338,7 @@ export default class SCController {
                         icon: "fa-solid fa-calendar simple-calendar-icon",
                         button: true,
                         visible: true,
-                        onClick: MainApplication.sceneControlButtonClick.bind(MainApplication)
+                        onChange: MainApplication.sceneControlButtonClick.bind(MainApplication)
                     });
                 } else {
                     notesGroup.tools.calendar = {
@@ -346,7 +346,7 @@ export default class SCController {
                         title: "FSC.Title",
                         icon: "fa-solid fa-calendar simple-calendar-icon",
                         button: true,
-                        onClick: MainApplication.sceneControlButtonClick.bind(MainApplication)
+                        onChange: MainApplication.sceneControlButtonClick.bind(MainApplication)
                     };
                 }
             }
