@@ -269,7 +269,7 @@ $theme: (
 body.game{
   .simple-calendar{
     &.wfrp4e{
-      &.window-app {
+      &.window-app, &.application {
         //Compact View
         &.fsc-compact-view {
           .window-content {

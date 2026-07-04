@@ -21,7 +21,7 @@ export default class MigrationApp extends HandlebarsApplicationMixin(Application
      */
     static DEFAULT_OPTIONS = {
         id: MigrationApp.appWindowId,
-        classes: ["simple-calendar", "window-app"],
+        classes: ["simple-calendar"],
         window: {
             title: "FSC.Migration.Title",
             resizable: false

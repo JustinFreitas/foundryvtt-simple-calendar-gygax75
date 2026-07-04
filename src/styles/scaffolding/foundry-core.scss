@@ -1,6 +1,6 @@
 @import "../variables";
 .simple-calendar{
-  &.window-app{
+  &.window-app, &.application{
     //Links
     a{
       color: var(--link-color);

@@ -250,7 +250,7 @@ $theme: (
 body.game{
   .simple-calendar{
     &.eclipsephase{
-      &.window-app {
+      &.window-app, &.application {
         input, select{
           &:focus{
             box-shadow: 0 0 10px var(--highlight) !important;

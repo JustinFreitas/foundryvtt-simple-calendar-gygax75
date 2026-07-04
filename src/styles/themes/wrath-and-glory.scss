@@ -259,7 +259,7 @@ $theme: (
 body.game{
   .simple-calendar{
     &.wrath-and-glory{
-      &.window-app {
+      &.window-app, &.application {
         //Compact View
         &.fsc-compact-view {
           .fsc-clock{

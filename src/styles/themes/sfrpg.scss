@@ -251,7 +251,7 @@ $theme: (
 body.game{
   .simple-calendar{
     &.sfrpg{
-      &.window-app {
+      &.window-app, &.application {
         &.fsc-compact-view{
           .window-content{
             .fsc-clock{

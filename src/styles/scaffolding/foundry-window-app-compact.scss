@@ -1,6 +1,6 @@
 @import "src/styles/variables";
 .simple-calendar{
-  &.window-app.fsc-compact-view {
+  &.window-app.fsc-compact-view, &.application.fsc-compact-view {
     header {
       flex: 0 0 pxToRem(16) !important;
       justify-content: flex-end;

@@ -247,7 +247,7 @@ $theme: (
 
 body.game{
   .simple-calendar {
-    &.window-app{
+    &.window-app, &.application{
       &.classic {
        //Links
        a:hover{

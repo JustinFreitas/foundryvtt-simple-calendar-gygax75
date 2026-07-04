@@ -1,6 +1,6 @@
 @import "src/styles/variables";
 .simple-calendar{
-  &.window-app{
+  &.window-app, &.application{
     .window-content{
       button.fsc-control {
       display: block;

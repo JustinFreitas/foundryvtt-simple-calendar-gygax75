@@ -250,7 +250,7 @@ $theme: (
 body.game{
   .simple-calendar{
     &.forbidden-lands{
-      &.window-app {
+      &.window-app, &.application {
         border: 9px solid transparent;
         border-image: $flAppBorder 108/3 repeat;
         box-shadow: unset;

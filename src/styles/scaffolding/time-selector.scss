@@ -1,7 +1,7 @@
 @import "../variables";
 
 .simple-calendar{
-  &.window-app{
+  &.window-app, &.application{
     .window-content{
       .fsc-time-selector{
         display: flex;

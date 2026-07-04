@@ -254,7 +254,7 @@ $theme: (
 body.game{
   .simple-calendar{
     &.dsa5{
-      &.window-app {
+      &.window-app, &.application {
         box-shadow: unset;
         //Compact View
         &.fsc-compact-view {
