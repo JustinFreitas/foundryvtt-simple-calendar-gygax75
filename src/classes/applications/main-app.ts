@@ -23,12 +23,37 @@ import { NoteSheet } from "../notes/note-sheet";
 /**
  * Contains all functionality for displaying/updating the simple calendar
  */
-export default class MainApp extends FormApplication {
+const ApplicationV2 = foundry.applications.api.ApplicationV2;
+const HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
+
+export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
     /**
      * The ID used for the application window within foundry
      * @type {string}
      */
     public static appWindowId: string = "fsc-simple-calendar-application";
+
+    static DEFAULT_OPTIONS = {
+        id: "fsc-simple-calendar-application",
+        classes: ["simple-calendar"],
+        window: {
+            title: "FSC.Title",
+            resizable: false
+        },
+        position: {
+            width: "auto",
+            height: "auto"
+        }
+    };
+
+    static PARTS = {
+        body: {
+            template: "modules/foundryvtt-simple-calendar/templates/main.html"
+        }
+    };
+
+    toggleCompactViewBind = this.toggleCompactView.bind(this);
+
     /**
      * Gets the current active calendar
      */
@@ -86,7 +111,7 @@ export default class MainApp extends FormApplication {
      * Simple Calendar constructor
      */
     constructor() {
-        super({});
+        super();
     }
 
     /**
@@ -109,21 +134,72 @@ export default class MainApp extends FormApplication {
      * Returns the default options for this application
      */
     static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "modules/foundryvtt-simple-calendar/templates/main.html";
-        options.title = "FSC.Title";
-        options.classes = ["simple-calendar"];
-        options.id = this.appWindowId;
-        options.resizable = false;
-        return options;
+        return {
+            ...super.defaultOptions,
+            id: this.appWindowId,
+            classes: ["simple-calendar"],
+            title: "FSC.Title",
+            template: "modules/foundryvtt-simple-calendar/templates/main.html",
+            resizable: false
+        };
+    }
+
+    async _prepareContext(options?: any): Promise<object> {
+        return await this.getData();
+    }
+
+    protected _onRender(context: object, options: any) {
+        super._onRender(context, options);
+        
+        this.element?.classList.forEach((cls: string) => {
+            if (cls.startsWith("sc-scale-") || cls === "classic" || cls === "dark" || cls === "foundry" || cls === "clean" || cls === "solstice" || cls === "storm" || cls === "winter") {
+                this.element?.classList.remove(cls);
+            }
+        });
+
+        this.element?.classList.add(GetThemeName());
+        
+        const persistentClass = SC.clientSettings.persistentOpen ? "fsc-persistent" : "";
+        if (persistentClass) {
+            this.element?.classList.add(persistentClass);
+        }
+
+        if (this.uiElementStates.compactView) {
+            this.element?.classList.add("fsc-compact-view");
+            this.element?.classList.add(`sc-scale-${SC.clientSettings.compactViewScale}`);
+        } else {
+            this.element?.classList.remove("fsc-compact-view");
+        }
+
+        const header = this.element?.querySelector(".window-header");
+        if (header) {
+            header.removeEventListener("dblclick", this.toggleCompactViewBind);
+            header.addEventListener("dblclick", this.toggleCompactViewBind);
+        }
+
+        this.activateListeners();
+    }
+
+    protected _onPosition(position: any) {
+        super._onPosition(position);
+        if (position.top !== undefined && position.left !== undefined) {
+            const appPos: SimpleCalendar.AppPosition = {
+                top: position.top,
+                left: position.left
+            };
+            if (this.uiElementStates.compactView) {
+                GameSettings.SaveObjectSetting(SettingNames.AppCompactPosition, appPos, false).catch(Logger.error);
+            } else {
+                GameSettings.SaveObjectSetting(SettingNames.AppPosition, appPos, false).catch(Logger.error);
+            }
+        }
     }
 
     /**
      * Gets the data object to be used by Handlebars when rending the HTML template
      */
-    getData(): Promise<FormApplication.Data<object>> | FormApplication.Data<object> {
+    getData(): any {
         const data = {
-            ...super.getData(),
             compactViewDisplay: {
                 currentSeasonName: "",
                 currentSeasonIcon: "",
@@ -236,35 +312,26 @@ export default class MainApp extends FormApplication {
 
     /**
      * Render the main application. Will open the module in compact mode, where it was last positioned and using the correct theme
-     * @param force
      * @param options
+     * @param parts
      */
-    render(force?: boolean, options?: Application.RenderOptions<FormApplicationOptions>): unknown {
-        if (typeof force === "undefined") {
-            force = true;
+    render(options?: boolean | any, parts?: any): any {
+        let renderOptions: any = {};
+        if (typeof options === "boolean") {
+            renderOptions = { force: options };
+        } else if (options) {
+            renderOptions = options;
         }
+
         if (canUser((<Game>game).user, SC.globalConfiguration.permissions.viewCalendar)) {
-            if (this.visibleCalendar.timeKeeper.getStatus() !== TimeKeeperStatus.Started) {
-                //this.visibleCalendar.setCurrentToVisible();
-            }
-            const mergedOptions: Application.RenderOptions = deepMerge({}, options);
             if (this.opening) {
                 this.uiElementStates.compactView = GameSettings.GetBooleanSettings(SettingNames.OpenCompact);
-
                 this.opening = false;
             }
 
-            const persistentClass = SC.clientSettings.persistentOpen ? "fsc-persistent" : "";
-
-            let scaleClass = "";
-            if (this.uiElementStates.compactView) {
-                scaleClass = `sc-scale-${SC.clientSettings.compactViewScale}`;
-            }
-
-            mergedOptions.classes = ["simple-calendar", GetThemeName(), persistentClass, scaleClass];
-            return super.render(force, mergedOptions);
+            super.render(renderOptions);
         }
-        return;
+        return this;
     }
 
     /**
@@ -278,7 +345,7 @@ export default class MainApp extends FormApplication {
         }
     }
 
-    override close(options?: FormApplication.CloseOptions): Promise<void> {
+    async close(options?: any): Promise<any> {
         if (this.keyClickBind) {
             document.removeEventListener("keydown", this.keyClickBind);
             document.removeEventListener("keyup", this.keyClickBind);
@@ -297,7 +364,7 @@ export default class MainApp extends FormApplication {
                             app.close();
                         }
                     });
-                    return Promise.resolve();
+                    return this;
                 }
                 // Case 4 (GM) - release controlled objects (if not in a preview)
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -310,7 +377,7 @@ export default class MainApp extends FormApplication {
                         //@ts-ignore
                         (<Canvas>canvas).activeLayer?.releaseAll();
                     }
-                    return Promise.resolve();
+                    return this;
                 }
                 // Case 5 - toggle the main menu
                 ui.menu?.toggle();
@@ -320,7 +387,7 @@ export default class MainApp extends FormApplication {
                 if ((<Canvas>canvas).ready) (<Canvas>canvas).fog.save();
             }
         }
-        return Promise.resolve();
+        return this;
     }
 
     toggleCompactView(event: Event) {
@@ -331,6 +398,13 @@ export default class MainApp extends FormApplication {
         this.hideDrawers();
         this.render(true);
     }
+
+    _getHeaderButtons(): any[] {
+        return [];
+    }
+
+    _onDragMouseMove(e: Event): void {}
+    _onDragMouseUp(e: Event): void {}
 
     _activateHeaderButtons(
         html: JQuery,

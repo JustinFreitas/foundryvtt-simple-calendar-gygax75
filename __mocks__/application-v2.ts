@@ -7,10 +7,20 @@ import { jest } from "@jest/globals";
  */
 class ApplicationV2 {
     static DEFAULT_OPTIONS: any = {};
+    static STATES = {
+        CLOSED: 0,
+        CLOSING: 1,
+        RENDERING: 2,
+        RENDERED: 3
+    };
 
     options: any = {};
-
     element: any = document.createElement("div");
+    state: number = 3;
+
+    get rendered() {
+        return this.state === ApplicationV2.STATES.RENDERED;
+    }
 
     constructor(options: any = {}) {
         // Merge the subclass DEFAULT_OPTIONS chain (shallow is enough for tests)
@@ -18,11 +28,17 @@ class ApplicationV2 {
     }
 
     render(_options?: any) {
+        this.state = ApplicationV2.STATES.RENDERED;
         return Promise.resolve(this);
     }
 
     close() {
+        this.state = ApplicationV2.STATES.CLOSED;
         return Promise.resolve();
+    }
+
+    setPosition(position: any) {
+        return this;
     }
 
     _prepareContext(_options?: any): any {

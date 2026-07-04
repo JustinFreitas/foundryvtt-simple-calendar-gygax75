@@ -33,11 +33,37 @@ import PF2E from "../systems/pf2e";
 import { FoundryVTTGameData } from "../foundry-interfacing/game-data";
 import { foundryGetRoute } from "../foundry-interfacing/utilities";
 
-export default class ConfigurationApp extends FormApplication {
+const ApplicationV2 = foundry.applications.api.ApplicationV2;
+const HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
+
+export default class ConfigurationApp extends HandlebarsApplicationMixin(ApplicationV2) {
     /**
      * ID used for the application window when rendered on the page
      */
     public static appWindowId: string = "fsc-simple-calendar-configuration-application-form";
+
+    static DEFAULT_OPTIONS = {
+        id: "fsc-simple-calendar-configuration-application-form",
+        classes: ["simple-calendar", "fsc-simple-calendar-configuration"],
+        window: {
+            title: "FSC.Configuration.Title",
+            resizable: true
+        },
+        position: {
+            width: 1005,
+            height: 700
+        },
+        tabs: [{ navSelector: ".tabs", contentSelector: "form", initial: "yearSettings" }]
+    };
+
+    static PARTS = {
+        body: {
+            template: "modules/foundryvtt-simple-calendar/templates/configuration.html"
+        }
+    };
+
+    public object: any = {};
+    public _tabs: any = [{ active: "yearSettings" }];
     /**
      * The HTML element representing the application window
      * @private
@@ -105,7 +131,7 @@ export default class ConfigurationApp extends FormApplication {
      * The Calendar configuration constructor
      */
     constructor() {
-        super({});
+        super();
     }
 
     /**
@@ -123,16 +149,22 @@ export default class ConfigurationApp extends FormApplication {
         this.object = calendar;
     }
 
-    render(force?: boolean, options?: Application.RenderOptions<FormApplicationOptions>): unknown {
+    render(options?: boolean | any, parts?: any): any {
         // Check to see if the object is empty, if it is this is likely the user clicking the button in
         // FoundryVTTs module settings, and we need to initialize and show the actual configuration dialog
         if (isObjectEmpty(this.object)) {
             ConfigurationApplication.initializeAndShowDialog().catch(Logger.error);
-            return;
+            return this;
         } else {
-            options = options ? options : {};
-            options.classes = ["simple-calendar", "fsc-simple-calendar-configuration", GetThemeName()];
-            return super.render(force, options);
+            GetThemeName();
+            let renderOptions: any = {};
+            if (typeof options === "boolean") {
+                renderOptions = { force: options };
+            } else if (options) {
+                renderOptions = options;
+            }
+            super.render(renderOptions);
+            return this;
         }
     }
 
@@ -148,10 +180,19 @@ export default class ConfigurationApp extends FormApplication {
         this.globalConfiguration.calendarsSameTimestamp = SC.globalConfiguration.calendarsSameTimestamp;
         this.globalConfiguration.syncCalendars = SC.globalConfiguration.syncCalendars;
         this.globalConfiguration.showNotesFolder = SC.globalConfiguration.showNotesFolder;
-        this.globalConfiguration.combatPauseRule = SC.globalConfiguration.combatPauseRule;
         this.globalConfiguration.inGameChatTimestamp = SC.globalConfiguration.inGameChatTimestamp;
-        this.clientSettings = deepMerge({}, SC.clientSettings);
-        this._tabs[0].active = "globalSettings";
+        this.globalConfiguration.combatPauseRule = SC.globalConfiguration.combatPauseRule;
+
+        this.clientSettings.theme = SC.clientSettings.theme;
+        this.clientSettings.openOnLoad = SC.clientSettings.openOnLoad;
+        this.clientSettings.openCompact = SC.clientSettings.openCompact;
+        this.clientSettings.rememberPosition = SC.clientSettings.rememberPosition;
+        this.clientSettings.rememberCompactPosition = SC.clientSettings.rememberCompactPosition;
+        this.clientSettings.noteReminderNotification = SC.clientSettings.noteReminderNotification;
+        this.clientSettings.sideDrawerDirection = SC.clientSettings.sideDrawerDirection;
+        this.clientSettings.alwaysShowNoteList = SC.clientSettings.alwaysShowNoteList;
+        this.clientSettings.persistentOpen = SC.clientSettings.persistentOpen;
+        this.clientSettings.compactViewScale = SC.clientSettings.compactViewScale;
 
         if (this.predefindCalendars.length === 0) {
             try {
@@ -163,28 +204,43 @@ export default class ConfigurationApp extends FormApplication {
             }
         }
 
-        if (!this.rendered) {
-            this.showApp();
-        } else {
-            this.bringToTop();
-        }
+        this.showApp();
     }
 
     /**
      * Returns the default options for this application
      */
     static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "modules/foundryvtt-simple-calendar/templates/configuration.html";
-        options.title = "FSC.Configuration.Title";
-        options.id = this.appWindowId;
-        options.classes = ["simple-calendar", "fsc-simple-calendar-configuration"];
-        options.resizable = true;
-        options.tabs = [{ navSelector: ".tabs", contentSelector: "form", initial: "yearSettings" }];
-        options.height = ConvertPxBasedOnRemSize(700);
-        options.width = ConvertPxBasedOnRemSize(1005);
-        options.scrollY = [".fsc-tab-wrapper", ".fsc-sheet-tabs"];
-        return options;
+        return {
+            ...super.defaultOptions,
+            id: this.appWindowId,
+            classes: ["simple-calendar", "fsc-simple-calendar-configuration"],
+            title: "FSC.Configuration.Title",
+            template: "modules/foundryvtt-simple-calendar/templates/configuration.html",
+            resizable: true,
+            tabs: [{ navSelector: ".tabs", contentSelector: "form", initial: "yearSettings" }],
+            height: ConvertPxBasedOnRemSize(700),
+            width: ConvertPxBasedOnRemSize(1005),
+            scrollY: [".fsc-tab-wrapper", ".fsc-sheet-tabs"]
+        };
+    }
+
+    async _prepareContext(options?: any): Promise<object> {
+        return await this.getData(options);
+    }
+
+    protected _onRender(context: object, options: any) {
+        super._onRender(context, options);
+        
+        this.element?.classList.forEach((cls: string) => {
+            if (cls === "classic" || cls === "dark" || cls === "foundry" || cls === "clean" || cls === "solstice" || cls === "storm" || cls === "winter") {
+                this.element?.classList.remove(cls);
+            }
+        });
+
+        this.element?.classList.add(GetThemeName());
+
+        this.activateListeners($(this.element));
     }
 
     /**
@@ -205,18 +261,20 @@ export default class ConfigurationApp extends FormApplication {
      * When closing the app make sure all date selectors are removed from the list so we don't keep around what we don't need
      * @param options
      */
-    close(options?: FormApplication.CloseOptions): Promise<void> {
+    async close(options?: any): Promise<any> {
         if (this.appWindow && this.toggleCalendarSelectorBind) {
             this.appWindow.removeEventListener("click", this.toggleCalendarSelectorBind);
         }
         CalManager.clearClones();
-        (this.activeCalendar).seasons.forEach((s) => {
-            DateSelectorManager.RemoveSelector(`sc_season_start_date_${s.id}`);
-            DateSelectorManager.RemoveSelector(`sc_season_sunrise_time_${s.id}`);
-        });
-        (this.activeCalendar).moons.forEach((m) => {
-            DateSelectorManager.RemoveSelector(`sc_first_new_moon_date_${m.id}`);
-        });
+        if (this.activeCalendar) {
+            (this.activeCalendar).seasons.forEach((s) => {
+                DateSelectorManager.RemoveSelector(`sc_season_start_date_${s.id}`);
+                DateSelectorManager.RemoveSelector(`sc_season_sunrise_time_${s.id}`);
+            });
+            (this.activeCalendar).moons.forEach((m) => {
+                DateSelectorManager.RemoveSelector(`sc_first_new_moon_date_${m.id}`);
+            });
+        }
         DateSelectorManager.RemoveSelector("quick-setup-predefined-calendar");
         this.appWindow = null;
         return super.close(options);
@@ -233,7 +291,7 @@ export default class ConfigurationApp extends FormApplication {
     /**
      * Gets the data object to be used by Handlebars when rending the HTML template
      */
-    public getData(options?: Application.RenderOptions): Promise<FormApplication.Data<object>> | FormApplication.Data<object> {
+    public getData(options?: any): any {
         const currDate = (this.activeCalendar).getCurrentDate();
         this.uiElementStates.dateFormatExample = FormatDateTime(
             { year: currDate.year, month: currDate.month, day: currDate.day, hour: 13, minute: 36, seconds: 42 },
@@ -259,7 +317,6 @@ export default class ConfigurationApp extends FormApplication {
         this.uiElementStates.disabledControls.pf2e = PF2E.isPF2E && (this.activeCalendar).generalSettings.pf2eSync;
 
         const data = {
-            ...super.getData(options),
             activeCalendarId: (this.activeCalendar).id,
             images: {
                 compactViewLayoutFull: foundryGetRoute("/modules/foundryvtt-simple-calendar/assets/sc-v2-theme-dark-comp.png"),
@@ -411,7 +468,6 @@ export default class ConfigurationApp extends FormApplication {
      * @protected
      */
     public activateListeners(html: JQuery<HTMLElement>) {
-        super.activateListeners(html);
         (this.activeCalendar).seasons.forEach((s) => {
             DateSelectorManager.GetSelector(`sc_season_start_date_${s.id}`, {
                 onDateSelect: this.dateSelectorChange.bind(this, s.id, ConfigurationDateSelectors.seasonStartingDate)
