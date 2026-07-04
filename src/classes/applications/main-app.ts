@@ -489,9 +489,10 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
      * Sets the width and height of the calendar window so that it is sized to show the calendar, the controls and space for 2 notes.
      */
     public static setWidthHeight(ma: MainApp) {
+        const main = document.getElementById(MainApp.appWindowId) || ma.element;
+        Logger.info("MainApp.setWidthHeight entry, main element found: " + !!main);
         let width = 0,
             height = 0;
-        const main = ma.element;
         if (main) {
             const header = <HTMLElement>main.querySelector(".window-header");
             if (header) {
