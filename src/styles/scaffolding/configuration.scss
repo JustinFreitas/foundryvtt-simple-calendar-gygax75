@@ -269,8 +269,9 @@
                   flex: 1;
                   text-align: center;
                   margin: 0 ($spacer-quarter);
-                  input{
+                  input:not([type="checkbox"]):not([type="radio"]){
                     text-align: left;
+                    width: 100%;
                   }
                   .fsc-show-advanced{
                     span{
