@@ -47,7 +47,13 @@ export default class Time extends ConfigurationItemBase {
     /**
      * How often the clock updates the time in seconds.
      */
-    updateFrequency: number = 1;
+    private _updateFrequency: number = 1;
+    get updateFrequency(): number {
+        return this._updateFrequency;
+    }
+    set updateFrequency(value: number) {
+        this._updateFrequency = value <= 0 ? 1 : value;
+    }
 
     /**
      * A new Time constructor

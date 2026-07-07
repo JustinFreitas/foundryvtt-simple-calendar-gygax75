@@ -205,6 +205,52 @@ export class DateSelector {
         if (options.useCloneCalendars) {
             this.useCloneCalendars = options.useCloneCalendars;
         }
+
+        // Clamp day values to maximum days in their respective month
+        if (this.calendar) {
+            const clampDateObj = (dateObj: SimpleCalendar.DateTime) => {
+                const year = dateObj.year;
+                const monthIdx = dateObj.month;
+                const isLeap = this.calendar.year.leapYearRule.isLeapYear(year);
+                const monthObj = this.calendar.months[monthIdx];
+                if (monthObj) {
+                    const maxDays = isLeap ? monthObj.numberOfLeapYearDays : monthObj.numberOfDays;
+                    if (dateObj.day > maxDays) {
+                        dateObj.day = maxDays;
+                    }
+                }
+            };
+            clampDateObj(this.selectedDate.start);
+            clampDateObj(this.selectedDate.end);
+            clampDateObj(this.selectedDate.visible);
+        }
+
+        // Correct end date if it is prior to start date
+        if (this.allowDateRangeSelection) {
+            let isPrior = false;
+            if (this.selectedDate.end.year < this.selectedDate.start.year) {
+                isPrior = true;
+            } else if (this.selectedDate.end.year === this.selectedDate.start.year) {
+                if (this.selectedDate.end.month < this.selectedDate.start.month) {
+                    isPrior = true;
+                } else if (this.selectedDate.end.month === this.selectedDate.start.month) {
+                    if (this.selectedDate.end.day < this.selectedDate.start.day) {
+                        isPrior = true;
+                    } else if (this.selectedDate.end.day === this.selectedDate.start.day) {
+                        if (!this.selectedDate.allDay) {
+                            const startSeconds = this.selectedDate.start.hour * 3600 + this.selectedDate.start.minute * 60 + this.selectedDate.start.seconds;
+                            const endSeconds = this.selectedDate.end.hour * 3600 + this.selectedDate.end.minute * 60 + this.selectedDate.end.seconds;
+                            if (endSeconds < startSeconds) {
+                                isPrior = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (isPrior) {
+                this.selectedDate.end = { ...this.selectedDate.start };
+            }
+        }
     }
 
     /**

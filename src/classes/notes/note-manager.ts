@@ -103,6 +103,33 @@ export default class NoteManager {
         renderSheet: boolean = true,
         updateMain: boolean = true
     ): Promise<StoredDocument<JournalEntry> | null> {
+        // Validate dates before creating the journal entry
+        const startYear = noteData.startDate.year;
+        const startMonthIndex = noteData.startDate.month;
+        const startDay = noteData.startDate.day;
+        
+        const startLeap = calendar.year.leapYearRule.isLeapYear(startYear);
+        const startMonthObj = calendar.months[startMonthIndex];
+        if (!startMonthObj) return null;
+        
+        const maxStartDays = startLeap ? startMonthObj.numberOfLeapYearDays : startMonthObj.numberOfDays;
+        if (startDay < 1 || startDay > maxStartDays) {
+            return null;
+        }
+
+        const endYear = noteData.endDate.year;
+        const endMonthIndex = noteData.endDate.month;
+        const endDay = noteData.endDate.day;
+        
+        const endLeap = calendar.year.leapYearRule.isLeapYear(endYear);
+        const endMonthObj = calendar.months[endMonthIndex];
+        if (!endMonthObj) return null;
+        
+        const maxEndDays = endLeap ? endMonthObj.numberOfLeapYearDays : endMonthObj.numberOfDays;
+        if (endDay < 1 || endDay > maxEndDays) {
+            return null;
+        }
+
         const perms: Partial<Record<string, 0 | 1 | 2 | 3>> = {};
         (<Game>game).users?.forEach((u) => {
             return (perms[u.id] = (<Game>game).user?.id === u.id ? 3 : calendar.generalSettings.noteDefaultVisibility ? 2 : 0);

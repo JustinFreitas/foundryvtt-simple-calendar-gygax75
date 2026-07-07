@@ -32,22 +32,64 @@ export default class Calendar extends ConfigurationItemBase {
      * @type {Year}
      */
     year: Year;
+    private _months: Month[] = [];
     /**
      * A list of all the months for this calendar
      */
-    months: Month[] = [];
+    get months(): Month[] {
+        return this._months;
+    }
+    set months(value: Month[]) {
+        this._months = value.map((m: any) => {
+            if (!(m instanceof Month)) {
+                const newMonth = new Month(m.name, m.numericRepresentation);
+                Object.assign(newMonth, m);
+                newMonth.name = m.name;
+                return newMonth;
+            }
+            return m;
+        });
+    }
+    private _weekdays: Weekday[] = [];
     /**
      * The days that make up a week
      */
-    weekdays: Weekday[] = [];
+    get weekdays(): Weekday[] {
+        return this._weekdays;
+    }
+    set weekdays(value: Weekday[]) {
+        this._weekdays = value.map((w: any) => {
+            if (!(w instanceof Weekday)) {
+                const newWeekday = new Weekday(w.numericRepresentation, w.name);
+                Object.assign(newWeekday, w);
+                newWeekday.name = w.name;
+                return newWeekday;
+            }
+            return w;
+        });
+    }
     /**
      * All the seasons for this calendar
      */
     seasons: Season[] = [];
+    private _moons: Moon[] = [];
     /**
      * All the moons for this calendar
      */
-    moons: Moon[] = [];
+    get moons(): Moon[] {
+        return this._moons;
+    }
+    set moons(value: Moon[]) {
+        this._moons = value.map((m: any) => {
+            if (!(m instanceof Moon)) {
+                const newMoon = new Moon(m.name, m.cycleLength);
+                Object.assign(newMoon, m);
+                newMoon.cycleLength = m.cycleLength;
+                return newMoon;
+            }
+            return m;
+        });
+    }
     /**
      * The time object responsible for all time related functionality
      */

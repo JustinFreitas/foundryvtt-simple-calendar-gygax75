@@ -53,7 +53,14 @@ class DocumentSheetV2 extends ApplicationV2 {
         return this.options.document;
     }
     get isEditable() {
-        return true;
+        const doc = this.document;
+        if (!doc) return true;
+        const user = (global as any).game?.user;
+        if (user?.isGM) return true;
+        const ownership = doc.ownership || {};
+        const userId = user?.id || "";
+        const userOwnership = (userId && ownership[userId] !== undefined) ? ownership[userId] : ownership.default;
+        return (userOwnership || 0) >= 3;
     }
 }
 
@@ -96,4 +103,50 @@ global.foundry.applications.apps.DocumentSheetConfig = DocumentSheetConfig;
 // @ts-ignore
 global.foundry.applications.ux.Tabs = Tabs;
 
-export { ApplicationV2, DocumentSheetV2, HandlebarsApplicationMixin, DocumentSheetConfig, Tabs };
+class DialogV2 {
+    static constructorSpy = jest.fn();
+    static instances: DialogV2[] = [];
+
+    options: any;
+
+    constructor(options: any = {}) {
+        this.options = options;
+        DialogV2.constructorSpy(options);
+        DialogV2.instances.push(this);
+    }
+
+    addEventListener(event: string, callback: Function) {}
+    render(options?: any) {
+        if (typeof (global as any).DialogRenderer === "function") {
+            (global as any).DialogRenderer();
+        }
+        return Promise.resolve(this);
+    }
+
+    static confirm(options: any = {}) {
+        return Promise.resolve(true);
+    }
+
+    static wait(options: any = {}) {
+        return Promise.resolve(null);
+    }
+}
+
+class JournalEntrySheet extends DocumentSheetV2 {}
+
+// @ts-ignore
+global.foundry = global.foundry || {};
+// @ts-ignore
+global.foundry.applications = global.foundry.applications || {};
+// @ts-ignore
+global.foundry.applications.api = global.foundry.applications.api || {};
+// @ts-ignore
+global.foundry.applications.api.DialogV2 = DialogV2;
+// @ts-ignore
+global.foundry.applications.sheets = global.foundry.applications.sheets || {};
+// @ts-ignore
+global.foundry.applications.sheets.journal = global.foundry.applications.sheets.journal || {};
+// @ts-ignore
+global.foundry.applications.sheets.journal.JournalEntrySheet = JournalEntrySheet;
+
+export { ApplicationV2, DocumentSheetV2, HandlebarsApplicationMixin, DocumentSheetConfig, Tabs, DialogV2, JournalEntrySheet };

@@ -8,10 +8,10 @@ import { getCheckBoxInputValue, getNumericInputValue, getTextInputValue } from "
 import GameSockets from "../foundry-interfacing/game-sockets";
 import MultiSelect from "../renderer/multi-select";
 import { foundryMergeObject } from "../foundry-interfacing/utilities";
-const DocumentSheetV2 = foundry.applications.api.DocumentSheetV2;
+const JournalEntrySheet = (foundry.applications as any).sheets?.journal?.JournalEntrySheet || foundry.applications.api.DocumentSheetV2;
 const HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
 
-export class NoteSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
+export class NoteSheet extends HandlebarsApplicationMixin(JournalEntrySheet) {
     public editors: Record<string, any> = {};
 
     private dirty: boolean = false;

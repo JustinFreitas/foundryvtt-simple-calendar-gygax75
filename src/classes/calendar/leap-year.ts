@@ -13,7 +13,13 @@ export default class LeapYear extends ConfigurationItemBase {
      * The custom modifier that determines how often a custom leap year happens in years
      * @type {number}
      */
-    customMod: number = 1;
+    private _customMod: number = 1;
+    get customMod(): number {
+        return this.rule === LeapYearRules.Custom && this._customMod <= 0 ? 1 : this._customMod;
+    }
+    set customMod(value: number) {
+        this._customMod = value;
+    }
     /**
      * The year to start calculating leap years from.
      */
@@ -78,7 +84,7 @@ export default class LeapYear extends ConfigurationItemBase {
                 this.startingYear = config.startingYear;
             }
 
-            if (this.rule === LeapYearRules.Custom && this.customMod <= 0) {
+            if (this.rule === LeapYearRules.Custom && this._customMod <= 0) {
                 this.rule = LeapYearRules.None;
             }
         }
@@ -97,7 +103,7 @@ export default class LeapYear extends ConfigurationItemBase {
         if (this.rule === LeapYearRules.Gregorian) {
             return year % 4 === 0 && (year % 100 !== 0 || (year % 100 === 0 && year % 400 === 0));
         } else if (this.rule === LeapYearRules.Custom) {
-            return year % this.customMod === 0;
+            return year % this._customMod === 0;
         }
         return false;
     }
@@ -111,8 +117,8 @@ export default class LeapYear extends ConfigurationItemBase {
         let num = 0;
         if (this.rule === LeapYearRules.Gregorian) {
             num = Math.floor(testYear / 4) - Math.floor(testYear / 100) + Math.floor(testYear / 400);
-        } else if (this.rule === LeapYearRules.Custom && this.customMod !== 0) {
-            num = Math.floor(testYear / this.customMod);
+        } else if (this.rule === LeapYearRules.Custom && this._customMod !== 0) {
+            num = Math.floor(testYear / this._customMod);
         }
         if (this.isLeapYear(year) && num > 0) {
             num = num - 1;
@@ -125,7 +131,7 @@ export default class LeapYear extends ConfigurationItemBase {
      * @param {number} year
      */
     previousLeapYear(year: number): number | null {
-        if (this.rule === LeapYearRules.Gregorian || (this.rule === LeapYearRules.Custom && this.customMod !== 0)) {
+        if (this.rule === LeapYearRules.Gregorian || (this.rule === LeapYearRules.Custom && this._customMod !== 0)) {
             let testYear = year - this.startingYear;
             while (Number.isInteger(testYear)) {
                 if (this.isLeapYear(testYear)) {
@@ -150,7 +156,7 @@ export default class LeapYear extends ConfigurationItemBase {
             if (this.rule === LeapYearRules.Gregorian) {
                 return yearInto / 4;
             } else {
-                return yearInto / this.customMod;
+                return yearInto / this._customMod;
             }
         }
         return 0;

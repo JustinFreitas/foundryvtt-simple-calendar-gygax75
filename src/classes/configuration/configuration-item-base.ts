@@ -28,6 +28,17 @@ export default class ConfigurationItemBase {
 
     constructor(name: string = "", numericRepresentation: number = NaN) {
         this.id = generateUniqueId();
+        let nameVal = name;
+        Object.defineProperty(this, "name", {
+            get() {
+                return nameVal;
+            },
+            set(value: string) {
+                nameVal = value.length > 100 ? value.substring(0, 100) : value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         this.name = name;
         this.numericRepresentation = numericRepresentation;
         this.description = "";

@@ -35,6 +35,7 @@ import { foundryGetRoute } from "../foundry-interfacing/utilities";
 
 const ApplicationV2 = foundry.applications.api.ApplicationV2;
 const HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
+const DialogV2 = foundry.applications.api.DialogV2;
 
 export default class ConfigurationApp extends HandlebarsApplicationMixin(ApplicationV2) {
     /**
@@ -53,7 +54,10 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
             width: 1005,
             height: 700
         },
-        tabs: [{ navSelector: ".tabs", contentSelector: "form", initial: "yearSettings" }]
+        tabs: [{ navSelector: ".tabs", contentSelector: "form", initial: "yearSettings" }],
+        actions: {
+            onConfigChange: function(event: Event, target: HTMLElement) {}
+        }
     };
 
     static PARTS = {
@@ -1575,21 +1579,30 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
             title = GameSettings.Localize("FSC.RemoveCalendar");
             content = GameSettings.Localize("FSC.RemoveCalendarConfirmText").replace("${CAL_NAME}", args["name"]);
         }
-        const dialog = new Dialog({
-            title: title,
+        const dialog = new DialogV2({
+            classes: ["ose", "dialog"],
+            position: {
+                width: 400,
+                height: "auto"
+            },
+            window: {
+                title: title
+            },
             content: content,
-            buttons: {
-                yes: {
-                    icon: '<i class="fa-solid fa-check"></i>',
+            buttons: [
+                {
+                    action: "yes",
+                    icon: 'fa-solid fa-check',
                     label: GameSettings.Localize("FSC.Confirm"),
                     callback: this.confirmationDialogYes.bind(this, contentType, args)
                 },
-                no: {
-                    icon: '<i class="fa-solid fa-times"></i>',
+                {
+                    action: "no",
+                    icon: 'fa-solid fa-times',
                     label: GameSettings.Localize("FSC.Cancel")
                 }
-            },
-            default: "no"
+            ],
+            defaultButton: "no"
         });
         dialog.render(true);
     }

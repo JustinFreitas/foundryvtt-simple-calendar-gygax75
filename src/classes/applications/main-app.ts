@@ -36,6 +36,7 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
     static DEFAULT_OPTIONS = {
         id: "fsc-simple-calendar-application",
         classes: ["simple-calendar"],
+        tag: "div",
         window: {
             title: "FSC.Title",
             resizable: false
@@ -43,6 +44,10 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
         position: {
             width: "auto",
             height: "auto"
+        },
+        actions: {
+            toggleClock: function(event: Event, target: HTMLElement) {},
+            changeTheme: function(event: Event, target: HTMLElement) {}
         }
     };
 

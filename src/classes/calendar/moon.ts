@@ -11,7 +11,13 @@ export default class Moon extends ConfigurationItemBase {
      * How long in calendar days the moon takes to do 1 revolution
      * @type {number}
      */
-    cycleLength: number;
+    private _cycleLength: number = 29.53059;
+    get cycleLength(): number {
+        return this._cycleLength;
+    }
+    set cycleLength(value: number) {
+        this._cycleLength = value <= 0 ? 29.53059 : value;
+    }
     /**
      * The different phases of the moon
      * @type {Array<MoonPhase>}
