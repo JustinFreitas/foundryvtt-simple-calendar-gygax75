@@ -496,15 +496,16 @@ describe("Calendar Class Tests", () => {
         expect(tCal.months[(d.getMonth() + 1) % tCal.months.length].visible).toBe(true);
 
         const curVisYear = tCal.year.visibleYear;
+        const expectedYearDelta = ((d.getMonth() + 1) % tCal.months.length) + 1 >= tCal.months.length ? 2 : 1;
         tCal.changeMonth(tCal.months.length + 1);
         expect(tCal.months[(d.getMonth() + 2) % tCal.months.length].visible).toBe(true);
-        expect(tCal.year.visibleYear).toBe(curVisYear + 1);
+        expect(tCal.year.visibleYear).toBe(curVisYear + expectedYearDelta);
 
         tCal.resetMonths("visible");
         tCal.months[10].visible = true;
         tCal.changeMonth(-1 * tCal.months.length);
         expect(tCal.months[10].visible).toBe(true);
-        expect(tCal.year.visibleYear).toBe(curVisYear);
+        expect(tCal.year.visibleYear).toBe(curVisYear + expectedYearDelta - 1);
     });
 
     test("Change Day Current", () => {
