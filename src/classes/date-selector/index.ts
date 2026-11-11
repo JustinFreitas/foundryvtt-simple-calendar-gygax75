@@ -215,8 +215,10 @@ export class DateSelector {
                 const monthObj = this.calendar.months[monthIdx];
                 if (monthObj) {
                     const maxDays = isLeap ? monthObj.numberOfLeapYearDays : monthObj.numberOfDays;
-                    if (dateObj.day > maxDays) {
-                        dateObj.day = maxDays;
+                    if (maxDays > 0 && dateObj.day >= maxDays) {
+                        dateObj.day = maxDays - 1;
+                    } else if (dateObj.day < 0) {
+                        dateObj.day = 0;
                     }
                 }
             };

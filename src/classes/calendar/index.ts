@@ -1280,6 +1280,7 @@ export default class Calendar extends ConfigurationItemBase {
                     // If the current player is the GM then we need to save this new value to the database
                     // Since the current date is updated this will trigger an update on all players as well
                     this.setDateTime(parsedDate, { updateApp: false, sync: false, save: GameSettings.IsGm() && SC.primary });
+                    Renderer.Clock.UpdateListener(`sc_${this.id}_clock`, this.timeKeeper.getStatus());
                 }
             }
             // If we didn't (locally) request this change then parse the new time into years, months, days and seconds and set those values
@@ -1293,6 +1294,7 @@ export default class Calendar extends ConfigurationItemBase {
                 // If the current player is the GM then we need to save this new value to the database
                 // Since the current date is updated this will trigger an update on all players as well
                 this.setDateTime(parsedDate, { updateApp: false, sync: false, save: GameSettings.IsGm() && SC.primary });
+                Renderer.Clock.UpdateListener(`sc_${this.id}_clock`, this.timeKeeper.getStatus());
             }
         }
         this.timeChangeTriggered = false;

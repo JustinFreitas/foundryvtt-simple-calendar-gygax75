@@ -103,6 +103,7 @@ Hooks.on("createJournalEntry", NManager.journalEntryUpdate.bind(NManager, 0));
 Hooks.on("updateJournalEntry", NManager.journalEntryUpdate.bind(NManager, 1));
 Hooks.on("deleteJournalEntry", NManager.journalEntryUpdate.bind(NManager, 2));
 Hooks.on("renderSceneConfig", SC.renderSceneConfig.bind(SC));
+Hooks.on("updateScene", SC.updateScene.bind(SC));
 Hooks.on("closeWorldClockSettings", PF2E.updatePF2EVariables.bind(PF2E));
 
 Logger.debugMode = false;

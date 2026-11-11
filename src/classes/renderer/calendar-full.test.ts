@@ -342,4 +342,22 @@ describe('Renderer Calendar Full Class Tests', () => {
         expect(CalendarFull.MoonPhaseIcons(tCal, 0, 0, 0)).toContain('fsc-moon-group-wrapper');
         expect(CalendarFull.MoonPhaseIcons(tCal, 0, 0, 0, true, true)).toContain('fsc-left');
     });
+
+    test('DayContextClick resolves child icon clicks', () => {
+        const setDateSpy = jest.spyOn(MainApplication, 'setCurrentDate').mockImplementation(() => {});
+        const list = document.createElement('div');
+        list.classList.add('fsc-day-context-list');
+        list.setAttribute('data-date', '2024/0/14');
+        const item = document.createElement('div');
+        item.setAttribute('data-action', 'current');
+        const icon = document.createElement('span');
+        icon.classList.add('fa-solid', 'fa-calendar-check');
+        item.append(icon);
+        list.append(item);
+
+        //@ts-ignore
+        CalendarFull.DayContextClick({ target: icon });
+        expect(setDateSpy).toHaveBeenCalledWith(2024, 0, 14);
+        setDateSpy.mockRestore();
+    });
 });

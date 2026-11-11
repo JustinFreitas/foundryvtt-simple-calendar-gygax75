@@ -997,12 +997,21 @@ describe("Main App Class Tests", () => {
         //@ts-ignore
         expect(Journal.showDialog).toHaveBeenCalledTimes(1);
 
+        // Regression: clicking a child `<span class="fa-solid ...">` icon inside `[data-action]` resolves the parent action
+        const childIcon = document.createElement("span");
+        childIcon.classList.add("fa-solid", "fa-eye");
+        action.append(childIcon);
+        //@ts-ignore
+        ma.noteContextClick({ target: childIcon });
+        //@ts-ignore
+        expect(Journal.showDialog).toHaveBeenCalledTimes(2);
+
         //@ts-ignore
         jest.spyOn(Journal, "showDialog").mockRejectedValue("E");
         //@ts-ignore
         ma.noteContextClick(fEvent);
         //@ts-ignore
-        expect(Journal.showDialog).toHaveBeenCalledTimes(2);
+        expect(Journal.showDialog).toHaveBeenCalledTimes(3);
 
         const je = {
             sheet: {

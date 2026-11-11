@@ -369,6 +369,32 @@ describe("SCController Tests", () => {
 
         //@ts-ignore
         SC.renderSceneConfig({}, mockQuery, { journals: [{ id: "asd", name: "asd" }] });
+
+        // Foundry V14 ApplicationV2 HTMLElement `<select name="journal">` path
+        const wrapper = document.createElement("div");
+        const select = document.createElement("select");
+        select.setAttribute("name", "journal");
+        const optCalNote = document.createElement("option");
+        optCalNote.value = "sc-note-1";
+        const optNormal = document.createElement("option");
+        optNormal.value = "normal-journal-1";
+        select.append(optCalNote, optNormal);
+        wrapper.append(select);
+
+        const origJournal = (<Game>game).journal;
+        //@ts-ignore
+        (<Game>game).journal = {
+            forEach: (cb: Function) => {
+                cb({ id: "sc-note-1", getFlag: (_m: string, k: string) => (k === "noteData" ? { calendarId: "default" } : undefined) });
+                cb({ id: "normal-journal-1", getFlag: () => undefined });
+            }
+        };
+        SC.globalConfiguration.showNotesFolder = false;
+        //@ts-ignore
+        SC.renderSceneConfig({}, wrapper);
+        expect(select.querySelector("option[value='sc-note-1']")).toBeNull();
+        expect(select.querySelector("option[value='normal-journal-1']")).not.toBeNull();
+        (<Game>game).journal = origJournal;
     });
 
     test("Game Paused", () => {

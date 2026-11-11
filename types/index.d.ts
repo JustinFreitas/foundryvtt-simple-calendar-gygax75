@@ -1453,7 +1453,7 @@ declare global {
                 intercalary: boolean;
                 intercalaryInclude: boolean;
                 showAdvanced: boolean;
-                startingWeekday: number | null;
+                startingWeekday: number | string | null;
             }
 
             /**

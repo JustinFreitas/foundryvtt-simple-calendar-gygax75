@@ -249,24 +249,34 @@ export class NoteSheet extends HandlebarsApplicationMixin(JournalEntrySheet) {
 
     close(): Promise<void> {
         if (this.dirty) {
-            const dialog = new Dialog({
-                title: GameSettings.Localize("FSC.NoteDirty"),
+            const DialogV2 = foundry.applications.api.DialogV2;
+            const dialog = new DialogV2({
+                classes: ["ose", "dialog"],
+                position: {
+                    width: 400,
+                    height: "auto"
+                },
+                window: {
+                    title: GameSettings.Localize("FSC.NoteDirty")
+                },
                 content: GameSettings.Localize("FSC.NoteDirtyText"),
-                buttons: {
-                    yes: {
-                        icon: '<i class="fa-solid fa-trash"></i>',
+                buttons: [
+                    {
+                        action: "yes",
+                        icon: "fa-solid fa-trash",
                         label: GameSettings.Localize("FSC.DiscardChanges"),
                         callback: this.isDirtyDialogClose.bind(this, false)
                     },
-                    save: {
-                        icon: '<i class="fa-solid fa-save"></i>',
+                    {
+                        action: "save",
+                        icon: "fa-solid fa-save",
                         label: GameSettings.Localize("FSC.Save"),
+                        default: true,
                         callback: this.isDirtyDialogClose.bind(this, true)
                     }
-                },
-                default: "save"
+                ]
             });
-            dialog.render(true);
+            dialog.render({ force: true });
             return Promise.resolve();
         } else {
             this.dirty = false;
@@ -318,10 +328,9 @@ export class NoteSheet extends HandlebarsApplicationMixin(JournalEntrySheet) {
         };
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        if (typeof TextEditor !== "undefined") {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-ignore
-            const editor = await TextEditor.create(options.document ? { engine: "prosemirror", ...options } : options);
+        const editorImpl = (foundry as any)?.applications?.ux?.TextEditor?.implementation ?? (typeof TextEditor !== "undefined" ? TextEditor : undefined);
+        if (editorImpl && typeof editorImpl.create === "function") {
+            const editor = await editorImpl.create(options.document ? { engine: "prosemirror", ...options } : options);
             this.editors[name] = {
                 instance: editor,
                 target: div
@@ -1221,23 +1230,33 @@ export class NoteSheet extends HandlebarsApplicationMixin(JournalEntrySheet) {
 
     delete(e: Event) {
         e.preventDefault();
-        const dialog = new Dialog({
-            title: GameSettings.Localize("FSC.DeleteConfirm"),
+        const DialogV2 = foundry.applications.api.DialogV2;
+        const dialog = new DialogV2({
+            classes: ["ose", "dialog"],
+            position: {
+                width: 400,
+                height: "auto"
+            },
+            window: {
+                title: GameSettings.Localize("FSC.DeleteConfirm")
+            },
             content: GameSettings.Localize("FSC.DeleteConfirmText"),
-            buttons: {
-                yes: {
-                    icon: '<i class="fa-solid fa-trash"></i>',
+            buttons: [
+                {
+                    action: "yes",
+                    icon: "fa-solid fa-trash",
                     label: GameSettings.Localize("FSC.Delete"),
                     callback: this.deleteConfirm.bind(this)
                 },
-                no: {
-                    icon: '<i class="fa-solid fa-times"></i>',
-                    label: GameSettings.Localize("FSC.Cancel")
+                {
+                    action: "no",
+                    icon: "fa-solid fa-times",
+                    label: GameSettings.Localize("FSC.Cancel"),
+                    default: true
                 }
-            },
-            default: "no"
+            ]
         });
-        dialog.render(true);
+        dialog.render({ force: true });
     }
 
     async deleteConfirm() {

@@ -82,7 +82,7 @@ export default class TimeKeeper {
             if (this.status !== TimeKeeperStatus.Started) {
                 this.pauseClicked = false;
                 if (activeCalendar.time.unifyGameAndClockPause && !fromPause) {
-                    (<Game>game).togglePause(false, true);
+                    (<Game>game).togglePause(false, { broadcast: true } as any);
                 }
                 if (this.intervalNumber === undefined) {
                     this.intervalNumber = window.setInterval(this.interval.bind(this), 1000 * this.updateFrequency);
@@ -98,7 +98,7 @@ export default class TimeKeeper {
                 this.pauseClicked = true;
                 this.updateStatus(TimeKeeperStatus.Paused);
                 if (activeCalendar.time.unifyGameAndClockPause) {
-                    (<Game>game).togglePause(true, true);
+                    (<Game>game).togglePause(true, { broadcast: true } as any);
                 }
             }
         }
@@ -114,7 +114,7 @@ export default class TimeKeeper {
             window.clearInterval(this.saveIntervalNumber);
             const activeCalendar = CalManager.getCalendar(this.calendarId);
             if (activeCalendar && activeCalendar.time.unifyGameAndClockPause) {
-                (<Game>game).togglePause(true, true);
+                (<Game>game).togglePause(true, { broadcast: true } as any);
             }
             if (GameSettings.IsGm() && SC.primary) {
                 this.saveInterval();

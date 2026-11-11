@@ -584,7 +584,8 @@ export default class CalendarFull {
     }
 
     public static DayContextClick(e: Event) {
-        const target = <HTMLElement>e.target;
+        const rawTarget = <HTMLElement>e.target;
+        const target = rawTarget?.closest?.<HTMLElement>("[data-action]") ?? rawTarget;
         if (target) {
             const action = target.getAttribute("data-action");
             const date = target.closest(".fsc-day-context-list")?.getAttribute("data-date");

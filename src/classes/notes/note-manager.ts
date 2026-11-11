@@ -45,9 +45,10 @@ export default class NoteManager {
     public async createJournalDirectory() {
         const folders = (<Game>game).folders;
         if (folders) {
-            this.noteDirectory = folders.find((f) => {
-                return f.name === NotesDirectoryName && f.type === "JournalEntry";
-            });
+            const findRootFolder = () =>
+                folders.find((f) => f.type === "JournalEntry" && Boolean((<any>f).getFlag?.(ModuleName, "root"))) ||
+                folders.find((f) => f.name === NotesDirectoryName && f.type === "JournalEntry");
+            this.noteDirectory = findRootFolder();
             if (!this.noteDirectory && GameSettings.IsGm()) {
                 await Folder.create({
                     name: NotesDirectoryName,
@@ -59,9 +60,7 @@ export default class NoteManager {
                         }
                     }
                 });
-                this.noteDirectory = folders.find((f) => {
-                    return f.name === NotesDirectoryName && f.type === "JournalEntry";
-                });
+                this.noteDirectory = findRootFolder();
             }
         }
     }
@@ -103,31 +102,36 @@ export default class NoteManager {
         renderSheet: boolean = true,
         updateMain: boolean = true
     ): Promise<StoredDocument<JournalEntry> | null> {
-        // Validate dates before creating the journal entry
+        // Validate 0-indexed month and day ranges before creating the journal entry
         const startYear = noteData.startDate.year;
         const startMonthIndex = noteData.startDate.month;
         const startDay = noteData.startDate.day;
-        
-        const startLeap = calendar.year.leapYearRule.isLeapYear(startYear);
-        const startMonthObj = calendar.months[startMonthIndex];
-        if (!startMonthObj) return null;
-        
-        const maxStartDays = startLeap ? startMonthObj.numberOfLeapYearDays : startMonthObj.numberOfDays;
-        if (startDay < 1 || startDay > maxStartDays) {
-            return null;
-        }
-
         const endYear = noteData.endDate.year;
         const endMonthIndex = noteData.endDate.month;
         const endDay = noteData.endDate.day;
-        
-        const endLeap = calendar.year.leapYearRule.isLeapYear(endYear);
-        const endMonthObj = calendar.months[endMonthIndex];
-        if (!endMonthObj) return null;
-        
-        const maxEndDays = endLeap ? endMonthObj.numberOfLeapYearDays : endMonthObj.numberOfDays;
-        if (endDay < 1 || endDay > maxEndDays) {
+
+        if (startMonthIndex < 0 || startDay < 0 || endMonthIndex < 0 || endDay < 0) {
             return null;
+        }
+
+        if (calendar.months.length > 0) {
+            const startLeap = calendar.year.leapYearRule.isLeapYear(startYear);
+            const startMonthObj = calendar.months[startMonthIndex];
+            if (!startMonthObj) return null;
+
+            const maxStartDays = startLeap ? startMonthObj.numberOfLeapYearDays : startMonthObj.numberOfDays;
+            if (startDay >= maxStartDays) {
+                return null;
+            }
+
+            const endLeap = calendar.year.leapYearRule.isLeapYear(endYear);
+            const endMonthObj = calendar.months[endMonthIndex];
+            if (!endMonthObj) return null;
+
+            const maxEndDays = endLeap ? endMonthObj.numberOfLeapYearDays : endMonthObj.numberOfDays;
+            if (endDay >= maxEndDays) {
+                return null;
+            }
         }
 
         const perms: Partial<Record<string, 0 | 1 | 2 | 3>> = {};
@@ -190,6 +194,9 @@ export default class NoteManager {
         if (!Object.prototype.hasOwnProperty.call(this.notes, calendarId)) {
             this.notes[calendarId] = [];
         }
+        if (journalEntry.id && this.notes[calendarId].some((n) => n.entryId === journalEntry.id)) {
+            return;
+        }
         this.notes[calendarId].push(new NoteStub(journalEntry.id || ""));
     }
 
@@ -217,11 +224,25 @@ export default class NoteManager {
             this.notes = {};
             await this.loadNotesFromFolder(this.noteDirectory);
 
-            const folders = (<Game>game).folders;
-            if (folders && this.noteDirectory?.id) {
-                const f = folders.get(this.noteDirectory.id);
-                if (f) {
-                    await this.loadNotesFromFolder(f);
+            const rootId = this.noteDirectory.id;
+            const folderCollection: any = (<Game>game).folders ?? (<any>game).journal?.directory?.folders;
+            if (folderCollection && rootId) {
+                const isChildFolder = (f: any) => {
+                    if (!f || f.id === rootId) return false;
+                    const parentId = f.folder?.id ?? (typeof f.folder === "string" ? f.folder : undefined) ?? f.parent?.id;
+                    return parentId === rootId;
+                };
+                const subFolders: Folder[] = [];
+                if (typeof folderCollection.filter === "function") {
+                    const filtered = folderCollection.filter(isChildFolder);
+                    if (Array.isArray(filtered)) {
+                        subFolders.push(...filtered);
+                    }
+                } else if (Array.isArray(folderCollection.contents)) {
+                    subFolders.push(...folderCollection.contents.filter(isChildFolder));
+                }
+                for (let i = 0; i < subFolders.length; i++) {
+                    await this.loadNotesFromFolder(subFolders[i]);
                 }
             }
         }

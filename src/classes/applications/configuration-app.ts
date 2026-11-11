@@ -376,7 +376,9 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
                 custom: "FSC.Configuration.LeapYear.Rules.Custom"
             },
             months: (this.activeCalendar).months.map((m) => {
-                return m.toTemplate();
+                const mt = m.toTemplate();
+                mt.startingWeekday = mt.startingWeekday === null ? "null" : mt.startingWeekday.toString();
+                return mt;
             }),
             monthStartingWeekdays: <{ [key: string]: string }>{},
             moons: (this.activeCalendar).moons.map((m) => {
@@ -1598,13 +1600,13 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
                 },
                 {
                     action: "no",
-                    icon: 'fa-solid fa-times',
-                    label: GameSettings.Localize("FSC.Cancel")
+                    icon: "fa-solid fa-times",
+                    label: GameSettings.Localize("FSC.Cancel"),
+                    default: true
                 }
-            ],
-            defaultButton: "no"
+            ]
         });
-        dialog.render(true);
+        dialog.render({ force: true });
     }
 
     /**
@@ -1861,7 +1863,7 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
                                 })?.name || key
                             }</strong>: ${GameSettings.Localize("FSC.CalendarNotes")}</label></label>`;
 
-                            html += `<label>${GameSettings.Localize("FSC.ImportInto")}:&nbsp;<select data-for-cal="">`;
+                            html += `<label>${GameSettings.Localize("FSC.ImportInto")}:&nbsp;<select data-for-cal="${key}">`;
                             const selectedIndex = this.calendars.findIndex((c) => {
                                 return c.id.indexOf(key) === 0;
                             });
@@ -1909,21 +1911,25 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
             ) {
                 this.globalConfiguration.permissions.loadFromSettings(data.permissions);
             }
-            if (Object.prototype.hasOwnProperty.call(data, "calendars") && data.calendars.length) {
+            const hasCalendars = Object.prototype.hasOwnProperty.call(data, "calendars") && Boolean(data.calendars?.length);
+            const hasNotes = Object.prototype.hasOwnProperty.call(data, "notes") && !isObjectEmpty(data.notes);
+            if (hasCalendars || hasNotes) {
                 //Ensure that the note directory exists and is correct
                 await NManager.createJournalDirectory();
+            }
+            const idLookupTable: Record<string, string> = {};
+            if (hasCalendars) {
                 for (let i = 0; i < data.calendars.length; i++) {
                     const calId = data.calendars[i].id;
-                    let newCalId = "";
                     if (
                         getCheckBoxInputValue(
-                            `.fsc-import-export .fsc-importing .fsc-file-details input[data-id="${data.calendars[i].id}"]`,
+                            `.fsc-import-export .fsc-importing .fsc-file-details input[data-id="${calId}"]`,
                             true,
                             this.appWindow
                         )
                     ) {
                         const importInto = getTextInputValue(
-                            `.fsc-import-export .fsc-importing .fsc-file-details select[data-for-cal="${data.calendars[i].id}"]`,
+                            `.fsc-import-export .fsc-importing .fsc-file-details select[data-for-cal="${calId}"]`,
                             "new",
                             this.appWindow
                         );
@@ -1933,14 +1939,19 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
                         delete data.calendars[i].id;
                         if (importCalendar) {
                             importCalendar.loadFromSettings(data.calendars[i]);
+                            idLookupTable[calId] = importCalendar.id;
                         } else {
                             const newCalendar = CalManager.addTempCalendar(data.calendars[i].name);
                             newCalendar.loadFromSettings(data.calendars[i]);
-                            newCalId = newCalendar.id;
+                            this.calendars.push(newCalendar);
+                            idLookupTable[calId] = newCalendar.id;
                         }
                     }
+                }
+            }
+            if (hasNotes) {
+                for (const calId in data.notes) {
                     if (
-                        Object.prototype.hasOwnProperty.call(data, "notes") &&
                         Object.prototype.hasOwnProperty.call(data.notes, calId) &&
                         getCheckBoxInputValue(
                             `.fsc-import-export .fsc-importing .fsc-file-details input[data-id="${calId}-notes"]`,
@@ -1956,7 +1967,7 @@ export default class ConfigurationApp extends HandlebarsApplicationMixin(Applica
                         const importCalendar = this.calendars.find((c) => {
                             return c.id === importInto;
                         });
-                        const calendarId = (newCalId || importCalendar?.id || calId).replace("_temp", "");
+                        const calendarId = (idLookupTable[calId] || importCalendar?.id || calId).replace("_temp", "");
                         for (let n = 0; n < data.notes[calId].length; n++) {
                             const journalEntryData = data.notes[calId][n];
                             const noteImportedIntoDifferentCalendar = !(journalEntryData.flags[ModuleName].noteData.calendarId === calendarId);

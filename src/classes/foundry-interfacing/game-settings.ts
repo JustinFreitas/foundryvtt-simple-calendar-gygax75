@@ -216,4 +216,36 @@ export class GameSettings {
         }
         return scene;
     }
+
+    /**
+     * Checks if the calendar should be paused because of combat.
+     * Unlinked combats (`!c.scene`) are treated as global combats relevant to all scenes.
+     */
+    static shouldPauseForCombat(combatsOverride?: any, sceneOverride?: { id?: string | null } | null, excludeCombatId?: string): boolean {
+        const combats = combatsOverride !== undefined ? combatsOverride : (<Game>game).combats;
+        if (!combats || (typeof combats.size === "number" && combats.size <= 0)) {
+            return false;
+        }
+        const activeScene = sceneOverride !== undefined ? sceneOverride : GameSettings.GetSceneForCombatCheck();
+        const isRelevant = (c: any): boolean => {
+            return Boolean(
+                c &&
+                    (!excludeCombatId || c.id !== excludeCombatId) &&
+                    c.started &&
+                    (!activeScene || !activeScene.id || !c.scene || c.scene.id === activeScene.id)
+            );
+        };
+        if (typeof combats.some === "function") {
+            return Boolean(combats.some(isRelevant));
+        }
+        if (typeof combats.find === "function") {
+            const found = combats.find(isRelevant);
+            return typeof found === "boolean" ? found : isRelevant(found);
+        }
+        if (typeof combats.filter === "function") {
+            const res = combats.filter(isRelevant);
+            return Array.isArray(res) ? res.length > 0 : Boolean(res);
+        }
+        return false;
+    }
 }

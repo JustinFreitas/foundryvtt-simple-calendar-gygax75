@@ -1,5 +1,19 @@
 # Change Log
 
+## 2.4.18-gygax75.48 - Foundry V14 Compatibility, DialogV2 Migration & Bug Fixes
+
+### Bug Fixes & Foundry V14 Improvements
+
+- Fixed 0-indexed day validation in `NoteManager.createNote` (`day = 0` for the 1st of any month was previously rejected, and `day = maxDays` was off-by-one) and 0-indexed day clamping in `DateSelector`.
+- Fixed duplicate root note stubs in `NoteManager.loadNotes()`, added subfolder note loading, deduplicated `addNoteStub`, and prioritized `flags["foundryvtt-simple-calendar"].root` when locating the notes directory.
+- Migrated all remaining legacy V1 `Dialog` instances (`API.runMigration`, `MainApp.dateControlApply`, `NoteSheet.close`, `NoteSheet.delete`) and `ConfigurationApp.confirmationDialog` to Foundry V14 `DialogV2` with OSE system classes and explicit window positioning.
+- Fixed context-menu actions (`MainApp.noteContextClick`, `CalendarFull.DayContextClick`) when clicking child `<span class="fa-solid ...">` icon elements.
+- Updated `TimeKeeper` pause synchronization to pass `{ broadcast: true }` to `game.togglePause(...)` in Foundry V14, updated `NoteSheet._activateEditor` to resolve `foundry.applications.ux.TextEditor.implementation`, updated `SC.renderSceneConfig` for Foundry V14 `ApplicationV2` `<select name="journal">` elements, and added Font Awesome 7 font-family fallbacks.
+- Incorporated upstream fixes for standalone/new-calendar note imports, month `startingWeekday` dropdown values, unlinked/global combat pause detection (`GameSettings.shouldPauseForCombat` + `updateScene` hook), and avoiding full calendar DOM redraws on clock-only ticks.
+- Updated GitHub Actions workflows to Node.js 24.x and normalized stamped `module.json` release versions without a leading `v` prefix.
+
+<hr/>
+
 ## 2.4.18 - Bug Fixes
 
 ![](https://img.shields.io/badge/release%20date-May%2024%2C%202024-blue)

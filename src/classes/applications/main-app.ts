@@ -1176,8 +1176,16 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
             const selectedMonth = this.activeCalendar.getMonth("selected");
             if (selectedMonth) {
                 if (selectedYear !== this.activeCalendar.year.visibleYear || !selectedMonth.visible) {
-                    const utsd = new Dialog({
-                        title: GameSettings.Localize("FSC.SetCurrentDateDialog.Title"),
+                    const DialogV2 = foundry.applications.api.DialogV2;
+                    const utsd = new DialogV2({
+                        classes: ["ose", "dialog"],
+                        position: {
+                            width: 400,
+                            height: "auto"
+                        },
+                        window: {
+                            title: GameSettings.Localize("FSC.SetCurrentDateDialog.Title")
+                        },
                         content: GameSettings.Localize("FSC.SetCurrentDateDialog.Content").replace(
                             "{DATE}",
                             FormatDateTime(
@@ -1193,8 +1201,10 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
                                 this.activeCalendar
                             )
                         ),
-                        buttons: {
-                            yes: {
+                        buttons: [
+                            {
+                                action: "yes",
+                                icon: "fa-solid fa-check",
                                 label: GameSettings.Localize("Yes"),
                                 callback: this.setCurrentDate.bind(
                                     this,
@@ -1203,13 +1213,15 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
                                     selectedMonthDayIndex.day || 0
                                 )
                             },
-                            no: {
-                                label: GameSettings.Localize("No")
+                            {
+                                action: "no",
+                                icon: "fa-solid fa-times",
+                                label: GameSettings.Localize("No"),
+                                default: true
                             }
-                        },
-                        default: "no"
+                        ]
                     });
-                    utsd.render(true);
+                    utsd.render({ force: true });
                 } else {
                     this.setCurrentDate(selectedYear, selectedMonthDayIndex.month || 0, selectedMonthDayIndex.day || 0);
                 }
@@ -1380,7 +1392,8 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     public noteContextClick(e: Event) {
-        const target = <HTMLElement>e.target;
+        const rawTarget = <HTMLElement>e.target;
+        const target = rawTarget?.closest?.<HTMLElement>("[data-action]") ?? rawTarget;
         const action = target?.getAttribute("data-action");
         if (target && action) {
             const contextMenu = target.closest(".fsc-context-menu");
@@ -1426,15 +1439,7 @@ export default class MainApp extends HandlebarsApplicationMixin(ApplicationV2) {
      * Starts the built-in timekeeper
      */
     startTime() {
-        const activeScene = GameSettings.GetSceneForCombatCheck();
-        const combats = (<Game>game).combats;
-        if (
-            combats &&
-            combats.size > 0 &&
-            combats.find((g) => {
-                return g.started && ((activeScene !== null && g.scene && g.scene.id === activeScene.id) || activeScene === null);
-            })
-        ) {
+        if (GameSettings.shouldPauseForCombat()) {
             GameSettings.UiNotification((<Game>game).i18n.localize("FSC.Warn.Time.ActiveCombats"), "warn");
         } else if (
             this.activeCalendar.generalSettings.gameWorldTimeIntegration === GameWorldTimeIntegrations.None ||

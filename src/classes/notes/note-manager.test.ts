@@ -5,6 +5,7 @@ import "../../../__mocks__/index";
 import { jest, beforeEach, describe, expect, test } from "@jest/globals";
 
 import Calendar from "../calendar";
+import Month from "../calendar/month";
 import { CalManager, MainApplication, NManager, updateCalManager, updateMainApplication, updateNManager } from "../index";
 import CalendarManager from "../calendar/calendar-manager";
 import MainApp from "../applications/main-app";
@@ -56,6 +57,23 @@ describe("Note Manager Class Tests", () => {
         game.user.isGM = true;
         await NManager.createJournalDirectory();
         expect(NManager.noteDirectory).toBeUndefined();
+
+        // Regression: renamed root folder with `flags["foundryvtt-simple-calendar"].root === true` is recognized without creating a duplicate
+        const origFolders = (<Game>game).folders;
+        const renamedRoot = {
+            id: "renamed-root",
+            name: "Campaign Calendar Events",
+            type: "JournalEntry",
+            getFlag: (_m: string, k: string) => (k === "root" ? true : undefined)
+        };
+        const createSpy = jest.spyOn(Folder, "create");
+        //@ts-ignore
+        (<Game>game).folders = [renamedRoot];
+        await NManager.createJournalDirectory();
+        expect(NManager.noteDirectory).toBe(renamedRoot);
+        expect(createSpy).not.toHaveBeenCalled();
+        (<Game>game).folders = origFolders;
+        createSpy.mockRestore();
     });
 
     test("Add New Note", async () => {
@@ -98,6 +116,38 @@ describe("Note Manager Class Tests", () => {
 
         tCal.generalSettings.noteDefaultVisibility = false;
         expect(await NManager.createNote("", "", noteData, tCal)).toBeDefined();
+
+        // Regression: 0-indexed day validation on a populated calendar (day 0 = 1st of month must succeed; day >= maxDays must be rejected)
+        const realCal = new Calendar("real", "Real");
+        realCal.months = [new Month("January", 1, 0, 31)]; // month 0 has 31 days (valid 0..30)
+        const day1Note = {
+            ...noteData,
+            calendarId: "real",
+            startDate: { year: 2024, month: 0, day: 0, hour: 0, minute: 0, seconds: 0 },
+            endDate: { year: 2024, month: 0, day: 0, hour: 0, minute: 0, seconds: 0 }
+        };
+        expect(await NManager.createNote("Day 1 Note", "", day1Note, realCal, false, false)).toBeDefined();
+
+        const lastDayNote = {
+            ...day1Note,
+            startDate: { year: 2024, month: 0, day: 30, hour: 0, minute: 0, seconds: 0 },
+            endDate: { year: 2024, month: 0, day: 30, hour: 0, minute: 0, seconds: 0 }
+        };
+        expect(await NManager.createNote("Day 31 Note", "", lastDayNote, realCal, false, false)).toBeDefined();
+
+        const overflowDayNote = {
+            ...day1Note,
+            startDate: { year: 2024, month: 0, day: 31, hour: 0, minute: 0, seconds: 0 },
+            endDate: { year: 2024, month: 0, day: 31, hour: 0, minute: 0, seconds: 0 }
+        };
+        expect(await NManager.createNote("Overflow Day Note", "", overflowDayNote, realCal, false, false)).toBeNull();
+
+        const negativeDayNote = {
+            ...day1Note,
+            startDate: { year: 2024, month: 0, day: -1, hour: 0, minute: 0, seconds: 0 },
+            endDate: { year: 2024, month: 0, day: 0, hour: 0, minute: 0, seconds: 0 }
+        };
+        expect(await NManager.createNote("Negative Day Note", "", negativeDayNote, realCal, false, false)).toBeNull();
     });
 
     test("Journal Entry Update", () => {
@@ -179,6 +229,37 @@ describe("Note Manager Class Tests", () => {
 
         //@ts-ignore
         game.journal.directory.folders = oldF;
+
+        // Regression: when `game.folders` includes the root folder AND a child folder AND an unrelated folder,
+        // root notes are loaded ONCE (not duplicated), child notes are loaded ONCE, and unrelated folders are ignored.
+        const childJe = {
+            id: "ns-child",
+            getFlag: () => ({ calendarId: "asd" }),
+            pages: { contents: [{}] },
+            createEmbeddedDocuments: async () => {}
+        };
+        const unrelatedJe = {
+            id: "ns-other",
+            getFlag: () => ({ calendarId: "asd" }),
+            pages: { contents: [{}] },
+            createEmbeddedDocuments: async () => {}
+        };
+        const rootFolder = { id: "nd", contents: [je] };
+        const childFolder = { id: "nd-child", folder: { id: "nd" }, contents: [childJe] };
+        const unrelatedFolder = { id: "other-folder", folder: null, contents: [unrelatedJe] };
+        const origFolders = (<Game>game).folders;
+        //@ts-ignore
+        NManager.noteDirectory = rootFolder;
+        //@ts-ignore
+        (<Game>game).folders = {
+            get: (id: string) => (id === "nd" ? rootFolder : undefined),
+            filter: (pred: (f: any) => boolean) => [rootFolder, childFolder, unrelatedFolder].filter(pred)
+        };
+        (NManager.addNoteStub as jest.Mock).mockRestore();
+        await NManager.loadNotes();
+        //@ts-ignore
+        expect(NManager.notes["asd"].map((n: any) => n.entryId)).toEqual(["ns1", "ns-child"]);
+        (<Game>game).folders = origFolders;
     });
 
     test("Show Note", () => {

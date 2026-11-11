@@ -305,14 +305,7 @@ export default class SCController {
     }
 
     private checkCombatActive() {
-        const activeScene = GameSettings.GetSceneForCombatCheck();
-        const combat = (<Game>game).combats?.find((c: Combat) => {
-            if (c.scene && activeScene) {
-                return c.scene.id === activeScene.id;
-            }
-            return false;
-        });
-        if (combat && combat.started) {
+        if (GameSettings.shouldPauseForCombat()) {
             this.activeCalendar.time.combatRunning = true;
         }
     }
@@ -383,13 +376,36 @@ export default class SCController {
     }
 
     /**
-     * Checks to see if the Simple Calendar not directory should be shown and if not removes all Simple Calendar notes from the list of available journal entries.
-     * @param config
-     * @param jquery
-     * @param data
+     * Checks to see if the Simple Calendar note directory should be shown and if not removes all Simple Calendar notes from the list of available journal entries.
+     * Supports both Foundry V14 ApplicationV2 (`HTMLElement` with `<select name="journal">`) and legacy V12/V13 (`JQuery` + `data.journals`).
      */
-    public renderSceneConfig(config: SceneConfig, jquery: JQuery, data: SceneConfig.Data) {
-        if (!this.globalConfiguration.showNotesFolder && data.journals) {
+    public renderSceneConfig(config: SceneConfig, htmlElement: any, data?: SceneConfig.Data) {
+        if (this.globalConfiguration.showNotesFolder || !htmlElement) {
+            return;
+        }
+        const html: HTMLElement | null =
+            htmlElement instanceof HTMLElement ? htmlElement : htmlElement[0] instanceof HTMLElement ? htmlElement[0] : null;
+        if (html) {
+            const root = html.querySelector("select[name='journal']") ?? html;
+            const journalCollection: any = (<Game>game).journal;
+            const removeIfCalendarNote = (je: any, fallbackId?: string) => {
+                const entryId = je?.id ?? fallbackId;
+                if (je && entryId && je.getFlag?.(ModuleName, "noteData")) {
+                    root.querySelector(`option[value='${entryId}']`)?.remove();
+                }
+            };
+            if (journalCollection && typeof journalCollection.forEach === "function") {
+                journalCollection.forEach((je: any) => removeIfCalendarNote(je));
+            } else if (Array.isArray(journalCollection?.contents)) {
+                journalCollection.contents.forEach((je: any) => removeIfCalendarNote(je));
+            }
+            if (data?.journals) {
+                for (let i = 0; i < data.journals.length; i++) {
+                    const je = journalCollection?.get?.(data.journals[i].id);
+                    removeIfCalendarNote(je, data.journals[i].id);
+                }
+            }
+        } else if (typeof htmlElement.find === "function" && data?.journals) {
             for (let i = 0; i < data.journals.length; i++) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 //@ts-ignore
@@ -397,9 +413,7 @@ export default class SCController {
                 if (je) {
                     const nd = <SimpleCalendar.NoteData>je.getFlag(ModuleName, "noteData");
                     if (nd) {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        //@ts-ignore
-                        const option = jquery.find(`option[value='${data.journals[i].id}']`);
+                        const option = htmlElement.find(`option[value='${data.journals[i].id}']`);
                         if (option) {
                             option.remove();
                         }
@@ -443,8 +457,8 @@ export default class SCController {
                 return c.id === combatant.parent?.id;
             });
             const activeScene = GameSettings.GetSceneForCombatCheck();
-            //If the combat has started and the current active scene is the scene for the combat then set that there is a combat running.
-            if (combat && combat.started && ((activeScene !== null && combat.scene && combat.scene.id === activeScene.id) || activeScene === null)) {
+            //If the combat has started and is either global (unlinked) or on the current active scene, mark combat running.
+            if (combat && combat.started && (!activeScene || !combat.scene || combat.scene.id === activeScene.id)) {
                 this.activeCalendar.time.combatRunning = true;
             }
         }
@@ -458,7 +472,7 @@ export default class SCController {
      */
     public combatUpdate(combat: Combat, round: RoundData, time: any) {
         const activeScene = GameSettings.GetSceneForCombatCheck();
-        if (combat.started && ((activeScene !== null && combat.scene && combat.scene.id === activeScene.id) || activeScene === null)) {
+        if (combat.started && (!activeScene || !combat.scene || combat.scene.id === activeScene.id)) {
             this.activeCalendar.time.combatRunning = true;
 
             //If time does not have the advanceTime property the combat was just started
@@ -470,6 +484,8 @@ export default class SCController {
                     this.activeCalendar.processOwnCombatRoundTime(combat);
                 }
             }
+        } else if (combat.started === false && this.activeCalendar.time.combatRunning) {
+            this.activeCalendar.time.combatRunning = GameSettings.shouldPauseForCombat((<Game>game).combats, activeScene);
         }
     }
 
@@ -479,8 +495,22 @@ export default class SCController {
      */
     public combatDelete(combat: Combat) {
         const activeScene = GameSettings.GetSceneForCombatCheck();
-        if (activeScene !== null && combat.scene && combat.scene.id === activeScene.id) {
-            this.activeCalendar.time.combatRunning = false;
+        if (combat.started && (!activeScene || !combat.scene || combat.scene.id === activeScene.id)) {
+            this.activeCalendar.time.combatRunning = GameSettings.shouldPauseForCombat((<Game>game).combats, activeScene, combat.id);
+        }
+    }
+
+    /**
+     * Triggered when a scene is updated (e.g. when the active scene changes while `combatPauseRule === Active`).
+     */
+    public updateScene(scene: Scene, diff?: any) {
+        if (
+            GameSettings.IsGm() &&
+            this.primary &&
+            this.globalConfiguration.combatPauseRule === CombatPauseRules.Active &&
+            (!diff || Object.prototype.hasOwnProperty.call(diff, "active"))
+        ) {
+            this.activeCalendar.time.combatRunning = GameSettings.shouldPauseForCombat();
         }
     }
 
@@ -491,11 +521,8 @@ export default class SCController {
      */
     public canvasInit(canvas: Canvas) {
         if (GameSettings.IsGm() && this.primary && this.globalConfiguration.combatPauseRule === CombatPauseRules.Current) {
-            const activeScene = canvas.scene ? canvas.scene.id : null;
-            const combatsInCurrent = (<Game>game).combats?.filter((combat) => {
-                return combat.started && combat.scene?.id === activeScene;
-            });
-            this.activeCalendar.time.combatRunning = !!(combatsInCurrent && combatsInCurrent.length);
+            const activeScene = canvas.scene ? { id: canvas.scene.id } : { id: "__none__" };
+            this.activeCalendar.time.combatRunning = GameSettings.shouldPauseForCombat((<Game>game).combats, activeScene);
         }
     }
 

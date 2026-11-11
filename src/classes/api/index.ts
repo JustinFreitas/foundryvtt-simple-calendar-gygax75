@@ -1697,23 +1697,33 @@ export async function removeNote(journalEntryId: string): Promise<boolean> {
  */
 export function runMigration(): void {
     if (GameSettings.IsGm() && SC.primary) {
-        const d = new Dialog({
-            title: GameSettings.Localize("FSC.Migration.APIDialog.Title"),
+        const DialogV2 = foundry.applications.api.DialogV2;
+        const d = new DialogV2({
+            classes: ["ose", "dialog"],
+            position: {
+                width: 400,
+                height: "auto"
+            },
+            window: {
+                title: GameSettings.Localize("FSC.Migration.APIDialog.Title")
+            },
             content: GameSettings.Localize("FSC.Migration.APIDialog.Content"),
-            buttons: {
-                yes: {
-                    icon: '<i class="fa-solid fa-check"></i>',
+            buttons: [
+                {
+                    action: "yes",
+                    icon: "fa-solid fa-check",
                     label: GameSettings.Localize("FSC.Confirm"),
                     callback: MigrationApplication.run.bind(MigrationApplication, true)
                 },
-                no: {
-                    icon: '<i class="fa-solid fa-times"></i>',
-                    label: GameSettings.Localize("FSC.Cancel")
+                {
+                    action: "no",
+                    icon: "fa-solid fa-times",
+                    label: GameSettings.Localize("FSC.Cancel"),
+                    default: true
                 }
-            },
-            default: "no"
+            ]
         });
-        d.render(true);
+        d.render({ force: true });
     }
 }
 

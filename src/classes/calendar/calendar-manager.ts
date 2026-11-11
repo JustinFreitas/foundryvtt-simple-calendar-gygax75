@@ -5,6 +5,7 @@ import PredefinedCalendar from "../configuration/predefined-calendar";
 import { Logger } from "../logging";
 import { MainApplication, NManager, SC } from "../index";
 import { Hook } from "../api/hook";
+import Renderer from "../renderer";
 
 /**
  * Class for managing multiple calendars
@@ -64,6 +65,7 @@ export default class CalendarManager {
      * @returns {number} The number of calendars loaded
      */
     public loadCalendars(): number {
+        const origDate = this.getVisibleCalendar()?.getCurrentDate();
         const calendars = <SimpleCalendar.CalendarData[]>GameSettings.GetObjectSettings(SettingNames.CalendarConfiguration);
         //Default array is being returned with an empty string, if this is the case we need to return that empty string to get an empty array
         if (calendars.length === 1 && !calendars[0]) {
@@ -88,7 +90,21 @@ export default class CalendarManager {
         NManager.checkNoteTriggers(this.activeId);
         const cal = this.getVisibleCalendar();
         if (cal && cal.timeKeeper.getStatus() !== TimeKeeperStatus.Started) {
-            MainApplication.updateApp();
+            if (origDate) {
+                const currDate = cal.getCurrentDate();
+                if (
+                    currDate.year !== origDate.year ||
+                    currDate.month !== origDate.month ||
+                    currDate.day !== origDate.day ||
+                    currDate.seconds === origDate.seconds
+                ) {
+                    MainApplication.updateApp();
+                } else {
+                    Renderer.Clock.UpdateListener(`sc_${cal.id}_clock`, cal.timeKeeper.getStatus());
+                }
+            } else {
+                MainApplication.updateApp();
+            }
         }
         return Object.keys(this.calendars).length;
     }

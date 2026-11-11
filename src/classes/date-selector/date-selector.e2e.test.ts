@@ -144,15 +144,23 @@ describe("DateSelector E2E Tests", () => {
             expect(ds.selectedDate.start.year).toBe(-100);
         });
 
-        test("F4-T2-4: DateSelector correctly navigates Feb 29 in leap years and adjusts when year is changed to non-leap year", () => {
+        test("F4-T2-4: DateSelector correctly navigates 0-indexed Feb 29 (day 28) in leap years and clamps to Feb 28 (day 27) in non-leap years", () => {
             ds.applyOptions({
-                selectedStartDate: { year: 2024, month: 1, day: 29, hour: 0, minute: 0, seconds: 0 }
-            });
-            expect(ds.selectedDate.start.day).toBe(29);
-            ds.applyOptions({
-                selectedStartDate: { year: 2023, month: 1, day: 29, hour: 0, minute: 0, seconds: 0 }
+                selectedStartDate: { year: 2024, month: 1, day: 28, hour: 0, minute: 0, seconds: 0 }
             });
             expect(ds.selectedDate.start.day).toBe(28);
+            ds.applyOptions({
+                selectedStartDate: { year: 2023, month: 1, day: 28, hour: 0, minute: 0, seconds: 0 }
+            });
+            expect(ds.selectedDate.start.day).toBe(27);
+            ds.applyOptions({
+                selectedStartDate: { year: 2023, month: 0, day: 0, hour: 0, minute: 0, seconds: 0 }
+            });
+            expect(ds.selectedDate.start.day).toBe(0);
+            ds.applyOptions({
+                selectedStartDate: { year: 2023, month: 0, day: -5, hour: 0, minute: 0, seconds: 0 }
+            });
+            expect(ds.selectedDate.start.day).toBe(0);
         });
 
         test("F4-T2-5: Rapidly updating selector values handles asynchronous render queue without conflicts", () => {
